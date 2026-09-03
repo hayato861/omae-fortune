@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}極み版｜べらんめえ占い{% endblock %}
+{% block content %}
+<section class="premium-hero shell">
+  <p class="eyebrow">BERANMEE KIWAMI</p>
+  <h1>十二鬼じゃ浅すぎる。<br><em>極みは、全{{ oni_count }}鬼。</em></h1>
+  <p>無料版の12守護鬼を、鬼性が現れる五つの相で細分化。仕事、銭、人間関係で「なぜ同じ失敗をするか」まで暴いてやる。</p>
+  <div class="aspect-grid">
+    {% for aspect in aspects %}
+      <article><span>{{ "%02d"|format(loop.index) }}</span><h2>{{ aspect.name }}</h2><p>{{ aspect.title }}</p></article>
+    {% endfor %}
+  </div>
+  <p class="formula"><b>12</b> 守護鬼 <i>×</i> <b>5</b>つの相 <i>=</i> <strong>{{ oni_count }}種類</strong></p>
+  <div class="price-card">
+    <span class="price-badge">予定価格</span>
+    <p><b>800</b>円 <small>税込 / 1回買い切り</small></p>
+    <ul>
+      <li>全{{ oni_count }}種類から、てめえの完全鬼名を特定</li>
+      <li>仕事・銭・恋から一つを深掘り</li>
+      <li>具体的な悩みに百烈鬼が回答</li>
+      <li>今日から七日間の行動指南</li>
+      <li>相性のいい鬼・衝突する鬼の攻略</li>
+      <li>読み切りの個別鑑定書</li>
+    </ul>
+    <button type="button" disabled>近日、入門受付開始</button>
+    <small>現在は先行準備中です。決済は発生しません。</small>
+  </div>
+</section>
+{% endblock %}

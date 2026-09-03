@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11100e">
+  <meta name="description" content="男の迷いを一喝する、女鬼・百烈鬼のべらんめえ占い。">
+  <title>{% block title %}べらんめえ占い{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700;800&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <div class="paper-noise"></div>
+  <header class="site-header">
+    <a class="brand" href="{{ url_for('index') }}">
+      <span class="brand-mark">べ</span>
+      <span><b>百烈鬼の鬼占</b><small>迷ってる暇ァねえ</small></span>
+    </a>
+    <a class="header-cta" href="{{ url_for('premium') }}">極み版を見る</a>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer>
+    <p>占いは人生の景気づけだ。最後に決めるのは、てめえ自身よ。</p>
+    <small>© 2026 べらんめえ占い</small>
+  </footer>
+</body>
+</html>

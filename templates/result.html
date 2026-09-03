@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}{{ name }}の今日の運勢｜べらんめえ占い{% endblock %}
+{% block content %}
+<section class="result-hero shell">
+  <p class="eyebrow">{{ today.strftime('%Y.%m.%d') }} / {{ name }}の運勢</p>
+  <div class="result-heading">
+    <div class="score-ring" style="--score: {{ fortune.score }}">
+      <span>{{ fortune.score }}</span><small>点</small>
+    </div>
+    <div><p class="rank">{{ fortune.rank }}</p><h1>{{ fortune.headline }}</h1></div>
+  </div>
+  <blockquote>{{ fortune.message }}</blockquote>
+</section>
+
+<section class="result-body">
+  <div class="shell">
+    <section class="oni-profile" data-share-name="{{ name }}" data-share-oni="{{ fortune.name }}" data-share-hell="{{ fortune.hell }}">
+      <p class="section-number">百烈鬼が暴く、てめえの鬼印</p>
+      <div class="oni-title-row">
+        <div class="type-number">{{ fortune.life_path }}</div>
+        <div><p class="oni-kicker">てめえの守護鬼は——</p><h2>{{ fortune.name }}</h2><p class="oni-role">{{ fortune.role }}</p></div>
+      </div>
+      <p class="oni-reading">{{ fortune.reading }}</p>
+      <div class="oni-traits">
+        <article><span>鬼の武器</span><strong>{{ fortune.weapon }}</strong></article>
+        <article><span>鬼の弱点</span><strong>{{ fortune.weakness }}</strong></article>
+        <article class="lucky-person"><span>本日のラッキーパーソン</span><strong>{{ fortune.person }}</strong></article>
+      </div>
+      <div class="hell-card">
+        <div><span>本日、気をつけるべき地獄</span><h3>{{ fortune.hell }}</h3></div>
+        <div class="hell-escape"><span>地獄を避ける一手</span><p>{{ fortune.escape }}</p></div>
+      </div>
+      <button class="share-result" type="button">俺の鬼印を知らせる <b>↗</b></button>
+      <p class="share-status" aria-live="polite"></p>
+    </section>
+    <div class="free-detail">
+      <p class="section-number">本日の一手</p>
+      <h2>{{ fortune.action }}</h2>
+      <div class="lucky-row"><span>勝負色 <b>{{ fortune.color }}</b></span><span>勝負数 <b>{{ fortune.lucky_number }}</b></span></div>
+    </div>
+    <div class="locked-grid">
+      <article><span>仕事運</span><h3>{{ fortune.work }}</h3></article>
+      <article><span>金運</span><h3>{{ fortune.money }}</h3></article>
+      <article><span>恋愛運</span><h3>{{ fortune.love }}</h3></article>
+      <div class="lock-overlay">
+        <div class="lock-icon">錠</div>
+        <p>守護鬼は同じでも、その現れ方は五つある</p>
+        <h2>てめえだけの「{{ fortune.premium_type.full_name }}」<br>全60鬼の詳細鑑定へ</h2>
+        <a href="{{ url_for('premium') }}">有料鑑定の中身を見る →</a>
+        <small>現在は先行準備中・決済は発生しません</small>
+      </div>
+    </div>
+    <a class="text-link" href="{{ url_for('index') }}">← 入口へ戻る</a>
+  </div>
+</section>
+<a class="mobile-bottom-cta" href="{{ url_for('premium') }}">
+  <small>百烈鬼の個別鑑定</small><strong>続きを見る　→</strong>
+</a>
+{% endblock %}
