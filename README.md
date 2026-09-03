@@ -19,7 +19,7 @@ flask --app app run --debug
 
 ## キャラクター画像の差し替え
 
-画像を `static/hyakuretsuki.webp` に置き、`templates/index.html` の `{% if false %}` を `{% if true %}` に変更します。
+現在はAI特有の質感を抑えた編集版 `static/hyakuretsuki-v2.webp` を使用しています。
 
 ## 有料化について
 
