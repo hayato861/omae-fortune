@@ -5,13 +5,26 @@ def test_home_page():
     client = app.test_client()
     response = client.get("/")
     assert response.status_code == 200
-    assert "べらんめえ占い" in response.text
+    assert "お前のためだけの占い" in response.text
+    assert "hyakuretsuki-v2.webp" in response.text
+    assert 'href="#main-content"' in response.text
+    assert 'data-fortune-form' in response.text
 
 
 def test_fortune_requires_fields():
     client = app.test_client()
     response = client.post("/fortune", data={})
     assert response.status_code == 400
+    assert 'role="alert"' in response.text
+
+
+def test_health_check_and_security_headers():
+    client = app.test_client()
+    response = client.get("/healthz")
+    assert response.status_code == 200
+    assert response.json == {"status": "ok"}
+    assert response.headers["X-Content-Type-Options"] == "nosniff"
+    assert response.headers["X-Frame-Options"] == "DENY"
 
 
 def test_fortune_is_stable_for_same_inputs():
@@ -43,9 +56,11 @@ def test_result_page():
     assert "極み版" in response.text
     assert "守護鬼" in response.text
     assert "気をつけるべき地獄" in response.text
+    assert 'class="has-mobile-cta"' in response.text
 
 
 def test_premium_page_promises_sixty_oni():
     response = app.test_client().get("/premium")
     assert response.status_code == 200
     assert "全60鬼" in response.text
+    assert "迷いを断ち、最短の一手を選ぶ" in response.text

@@ -10,6 +10,15 @@ from flask import Flask, render_template, request
 app = Flask(__name__)
 
 
+@app.after_request
+def add_security_headers(response):
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    return response
+
+
 FORTUNES = [
     {
         "rank": "大吉",
@@ -135,6 +144,11 @@ def daily_fortune(name: str, birthday: str) -> dict[str, object]:
 @app.get("/")
 def index():
     return render_template("index.html", today=date.today())
+
+
+@app.get("/healthz")
+def healthz():
+    return {"status": "ok"}
 
 
 @app.post("/fortune")

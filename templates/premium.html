@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-{% block title %}極み版｜べらんめえ占い{% endblock %}
+{% block title %}極み版｜お前のためだけの占い{% endblock %}
+{% block description %}12守護鬼×五つの相、全60鬼から完全鬼名を特定する「百烈鬼の鬼占 極み版」の鑑定内容。{% endblock %}
+{% block og_title %}全60鬼の個別鑑定・極み版｜百烈鬼の鬼占{% endblock %}
 {% block content %}
 <section class="premium-hero shell">
   <p class="eyebrow">BERANMEE KIWAMI</p>
@@ -7,7 +9,7 @@
   <p>無料版の12守護鬼を、鬼性が現れる五つの相で細分化。仕事、銭、人間関係で「なぜ同じ失敗をするか」まで暴いてやる。</p>
   <div class="aspect-grid">
     {% for aspect in aspects %}
-      <article><span>{{ "%02d"|format(loop.index) }}</span><h2>{{ aspect.name }}</h2><p>{{ aspect.title }}</p></article>
+      <article><span>{{ "%02d"|format(loop.index) }}</span><h2>{{ aspect.name }}</h2><p>{{ aspect.title }}</p><small>{{ aspect.gift }}</small></article>
     {% endfor %}
   </div>
   <p class="formula"><b>12</b> 守護鬼 <i>×</i> <b>5</b>つの相 <i>=</i> <strong>{{ oni_count }}種類</strong></p>

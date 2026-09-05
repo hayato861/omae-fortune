@@ -2,9 +2,9 @@
 {% block content %}
 <section class="hero shell">
   <div class="hero-copy">
-    <p class="eyebrow">男の今日を、一喝で決める。</p>
-    <h1>おい、<em>小便小僧。</em><br>運まで人任せに<br>してんじゃねえ。</h1>
-    <p class="lead">仕事、銭、惚れた腫れた。ぐずぐず迷うてめえに、女鬼・百烈鬼が今日の筋道をズバッと言ってやらぁ。</p>
+    <p class="eyebrow">やれるもんならやってみろ。嘘はつくじゃねえ！</p>
+    <h1>お前のためだけの<br><em>占い</em></h1>
+    <p class="lead">仕事、銭、惚れた腫れた。名前と生年月日を置いていけ。人ならざる鬼・百烈鬼が、お前の腹ん中まで見抜いてやらぁ。</p>
     <div class="trust-row">
       <span>登録いらず</span><span>一日一回無料</span><span>所要30秒</span>
     </div>
@@ -25,15 +25,13 @@
       <h2>てめえの性根と<br>今日を見抜く</h2>
       <p>生年月日から数秘タイプを割り出し、今日の日運を重ねる。同じ入力なら、その日は同じお告げだ。</p>
     </div>
-    <form class="fortune-form" action="{{ url_for('fortune') }}" method="post">
-      {% if error %}<p class="form-error">{{ error }}</p>{% endif %}
-      <label>呼ばれたい名前
-        <input name="name" value="{{ name or '' }}" maxlength="30" placeholder="例：健太" autocomplete="name" required>
-      </label>
-      <label>生年月日
-        <input name="birthday" value="{{ birthday or '' }}" type="date" max="{{ today.isoformat() }}" required>
-      </label>
-      <button type="submit"><span>無料で一喝される</span><b>→</b></button>
+    <form class="fortune-form" action="{{ url_for('fortune') }}" method="post" data-fortune-form>
+      {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+      <label for="name">呼ばれたい名前</label>
+      <input id="name" name="name" value="{{ name or '' }}" maxlength="30" placeholder="例：健太" autocomplete="name" required{% if error and not name %} autofocus{% endif %}>
+      <label for="birthday">生年月日</label>
+      <input id="birthday" name="birthday" value="{{ birthday or '' }}" type="date" max="{{ today.isoformat() }}" required{% if error and name %} autofocus{% endif %}>
+      <button type="submit"><span>無料で一喝される</span><b aria-hidden="true">→</b></button>
       <small>入力内容は保存しません。占い結果の生成にのみ使います。</small>
     </form>
   </div>

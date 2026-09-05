@@ -1,5 +1,8 @@
 {% extends "base.html" %}
-{% block title %}{{ name }}の今日の運勢｜べらんめえ占い{% endblock %}
+{% block title %}{{ name }}の今日の運勢｜お前のためだけの占い{% endblock %}
+{% block description %}{{ name }}の今日の運勢は{{ fortune.rank }}、{{ fortune.score }}点。守護鬼「{{ fortune.name }}」から今日の一手を授けます。{% endblock %}
+{% block og_title %}{{ name }}の守護鬼は「{{ fortune.name }}」｜百烈鬼の鬼占{% endblock %}
+{% block body_class %}has-mobile-cta{% endblock %}
 {% block content %}
 <section class="result-hero shell">
   <p class="eyebrow">{{ today.strftime('%Y.%m.%d') }} / {{ name }}の運勢</p>
@@ -30,7 +33,7 @@
         <div><span>本日、気をつけるべき地獄</span><h3>{{ fortune.hell }}</h3></div>
         <div class="hell-escape"><span>地獄を避ける一手</span><p>{{ fortune.escape }}</p></div>
       </div>
-      <button class="share-result" type="button">俺の鬼印を知らせる <b>↗</b></button>
+      <button class="share-result" type="button">俺の鬼印を知らせる <b aria-hidden="true">↗</b></button>
       <p class="share-status" aria-live="polite"></p>
     </section>
     <div class="free-detail">
