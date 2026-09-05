@@ -123,3 +123,8 @@ def test_premium_page_promises_sixty_oni():
     assert "迷いを断ち、最短の一手を選ぶ" in response.text
     assert "無料占いへ戻る" in response.text
     assert "極み版を見る" not in response.text
+    assert "初回極み鑑定" in response.text
+    assert "100</b>円" in response.text
+    assert "百烈鬼通い手形" in response.text
+    assert "300</b>円" in response.text
+    assert "800</b>円" not in response.text

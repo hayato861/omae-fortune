@@ -42,6 +42,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
   .mobile-bottom-cta{position:fixed;z-index:20;display:flex;align-items:center;justify-content:space-between;left:0;right:0;bottom:0;min-height:70px;padding:10px 18px;background:var(--red);color:#fff;text-decoration:none;box-shadow:0 -8px 24px rgba(0,0,0,.25)}
   .mobile-bottom-cta small,.mobile-bottom-cta strong{display:block}.mobile-bottom-cta small{font-size:11px}.mobile-bottom-cta strong{font-size:16px}
 }
+.pricing-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;align-items:stretch;margin-top:55px}.pricing-grid .price-card{width:100%;max-width:none;margin:0;box-shadow:9px 9px 0 #4e493f}.pricing-grid .price-card-featured{box-shadow:12px 12px 0 var(--gold)}.price-card>h2{margin:4px 0 20px;text-align:center;font:800 25px "Shippori Mincho",serif}.pricing-grid .price-card>p b{font-size:62px}
+@media(max-width:700px){.pricing-grid{grid-template-columns:1fr;gap:34px}.pricing-grid .price-card{padding:38px 22px}.pricing-grid .price-card>p b{font-size:56px}}
 .copy-fallback{position:fixed;left:-9999px;top:0}
 .title-tail{display:block;text-align:right}.no-break{white-space:nowrap}
 .birthday-group{margin:0 0 24px}.birthday-group>p{margin:0 0 10px;font-weight:700}.birthday-fields{display:grid;grid-template-columns:minmax(90px,1.7fr) auto minmax(56px,1fr) auto minmax(56px,1fr) auto;align-items:end;gap:8px}.birthday-fields label{margin:0}.birthday-fields label span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.birthday-fields input{margin:0;text-align:center}.birthday-fields i{padding-bottom:13px;font-style:normal;font-weight:700;color:#aaa}
