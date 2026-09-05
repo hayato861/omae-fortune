@@ -69,6 +69,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 .hell-card p{margin:0;font-weight:900;font-size:18px;line-height:1.6}
 .share-result{display:flex;justify-content:space-between;width:100%;margin-top:18px;padding:17px 21px;border:1px solid var(--gold);background:transparent;color:var(--gold);font:900 16px inherit;cursor:pointer}
 .share-result:hover{background:var(--gold);color:var(--ink)}
+.share-result:disabled{cursor:wait;opacity:.65}
 .share-status{min-height:24px;margin:8px 0 0;color:#aaa;text-align:center;font-size:12px}
 @media(max-width:600px){
   .oni-profile{margin-bottom:52px;padding-bottom:45px}

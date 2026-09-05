@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import json
+import logging
 import random
 from datetime import date
 
@@ -8,6 +10,9 @@ from flask import Flask, render_template, request
 
 
 app = Flask(__name__)
+analytics_logger = logging.getLogger("fortune.analytics")
+analytics_logger.setLevel(logging.INFO)
+ALLOWED_EVENTS = {"fortune_started", "share_started", "share_completed", "premium_clicked"}
 
 
 @app.after_request
@@ -151,6 +156,16 @@ def healthz():
     return {"status": "ok"}
 
 
+@app.post("/events")
+def track_event():
+    payload = request.get_json(silent=True) or {}
+    event = payload.get("event")
+    if event not in ALLOWED_EVENTS:
+        return {"error": "invalid event"}, 400
+    analytics_logger.info(json.dumps({"event": event}, ensure_ascii=False))
+    return "", 204
+
+
 @app.post("/fortune")
 def fortune():
     name = request.form.get("name", "").strip()[:30]
@@ -167,6 +182,7 @@ def fortune():
             name=name,
             birthday=birthday,
         ), 400
+    analytics_logger.info(json.dumps({"event": "fortune_completed"}, ensure_ascii=False))
     return render_template(
         "result.html",
         today=date.today(),

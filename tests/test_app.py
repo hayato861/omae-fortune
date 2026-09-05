@@ -27,6 +27,12 @@ def test_health_check_and_security_headers():
     assert response.headers["X-Frame-Options"] == "DENY"
 
 
+def test_analytics_accepts_only_known_anonymous_events():
+    client = app.test_client()
+    assert client.post("/events", json={"event": "share_completed"}).status_code == 204
+    assert client.post("/events", json={"event": "unknown"}).status_code == 400
+
+
 def test_fortune_is_stable_for_same_inputs():
     assert daily_fortune("健太", "1990-01-01") == daily_fortune("健太", "1990-01-01")
 
@@ -56,6 +62,8 @@ def test_result_page():
     assert "極み版" in response.text
     assert "守護鬼" in response.text
     assert "気をつけるべき地獄" in response.text
+    assert "data-share-weapon" in response.text
+    assert "画像つきで鬼印を知らせる" in response.text
     assert 'class="has-mobile-cta"' in response.text
 
 
