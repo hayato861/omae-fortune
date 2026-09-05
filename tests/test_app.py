@@ -121,3 +121,5 @@ def test_premium_page_promises_sixty_oni():
     assert response.status_code == 200
     assert "全60鬼" in response.text
     assert "迷いを断ち、最短の一手を選ぶ" in response.text
+    assert "無料占いへ戻る" in response.text
+    assert "極み版を見る" not in response.text
