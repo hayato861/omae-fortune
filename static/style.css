@@ -43,6 +43,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
   .mobile-bottom-cta small,.mobile-bottom-cta strong{display:block}.mobile-bottom-cta small{font-size:11px}.mobile-bottom-cta strong{font-size:16px}
 }
 .copy-fallback{position:fixed;left:-9999px;top:0}
+.title-tail{display:block;text-align:right}.no-break{white-space:nowrap}
 
 /* 有料版: 12守護鬼 × 五相 */
 .aspect-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:50px 0 30px;text-align:left}
