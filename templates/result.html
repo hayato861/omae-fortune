@@ -27,7 +27,7 @@
       data-card-image="{{ url_for('static', filename='hyakuretsuki-v2.webp') }}">
       <p class="section-number">百烈鬼が暴く、てめえの鬼印</p>
       <div class="oni-title-row">
-        <div class="type-number">{{ fortune.life_path }}</div>
+        <div class="type-number"><small>鬼ナンバー</small><strong>{{ fortune.life_path }}</strong></div>
         <div><p class="oni-kicker">てめえの守護鬼は——</p><h2>{{ fortune.name }}</h2><p class="oni-role">{{ fortune.role }}</p></div>
       </div>
       <p class="oni-reading">{{ fortune.reading }}</p>

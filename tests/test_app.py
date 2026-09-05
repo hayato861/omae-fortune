@@ -83,6 +83,7 @@ def test_result_page():
     assert "健太の運勢" in response.text
     assert "極み版" in response.text
     assert "守護鬼" in response.text
+    assert "鬼ナンバー" in response.text
     assert "気をつけるべき地獄" in response.text
     assert "data-share-weapon" in response.text
     assert "画像つきで鬼印を知らせる" in response.text

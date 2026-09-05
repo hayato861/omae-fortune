@@ -11,7 +11,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 .character-image{width:100%;height:370px;object-fit:cover;object-position:center top}
 .type-reading{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:28px;max-width:820px;margin:0 auto 70px;padding-bottom:55px;border-bottom:1px solid #454038}
 .type-reading .section-number{grid-column:1/-1;margin:0}
-.type-number{width:100px;height:100px;border:2px solid var(--gold);color:var(--gold);display:grid;place-items:center;border-radius:50%;font:800 48px "Shippori Mincho",serif}
+.type-number{width:112px;height:112px;border:2px solid var(--gold);color:var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:50%;line-height:1}.type-number small{font:900 11px "Zen Kaku Gothic New",sans-serif;letter-spacing:.06em}.type-number strong{margin-top:7px;font:800 43px "Shippori Mincho",serif}
 .type-reading h2{font:800 28px "Shippori Mincho",serif;margin:0 0 10px}
 .type-reading h2 small{font:700 15px "Zen Kaku Gothic New",sans-serif;color:#aaa}
 .type-reading p{line-height:1.8}
@@ -77,7 +77,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 @media(max-width:600px){
   .oni-profile{margin-bottom:52px;padding-bottom:45px}
   .oni-title-row{align-items:flex-start;gap:17px}
-  .oni-profile .type-number{flex:0 0 auto;width:72px;height:72px;font-size:34px}
+  .oni-profile .type-number{flex:0 0 auto;width:82px;height:82px}.oni-profile .type-number small{font-size:9px}.oni-profile .type-number strong{margin-top:5px;font-size:32px}
   .oni-profile h2{font-size:39px}.oni-role{font-size:13px}.oni-reading{font-size:17px;padding-left:16px;margin:25px 0}
   .oni-traits{grid-template-columns:1fr}.oni-traits .lucky-person{grid-column:auto}.oni-traits article{padding:18px}.oni-traits strong{font-size:16px}
   .hell-card{grid-template-columns:1fr}.hell-card>div{padding:21px}.hell-card>div+div{border-left:0;border-top:1px solid rgba(216,58,39,.45)}.hell-card h3{font-size:28px}.hell-card p{font-size:16px}
