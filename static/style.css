@@ -73,6 +73,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 .share-result{display:flex;justify-content:space-between;width:100%;margin-top:18px;padding:17px 21px;border:1px solid var(--gold);background:transparent;color:var(--gold);font:900 16px inherit;cursor:pointer}
 .share-result:hover{background:var(--gold);color:var(--ink)}
 .share-result:disabled{cursor:wait;opacity:.65}
+.fortune-reason{margin:22px 0 0;color:var(--muted);font-size:14px}.fortune-reason b{color:var(--red)}
+.daily-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:42px 0 15px;text-align:left}.daily-detail-grid article{border:1px solid #514c43;background:#26231e;padding:22px}.daily-detail-grid span{color:var(--gold);font-size:12px;font-weight:900;letter-spacing:.08em}.daily-detail-grid p{margin:10px 0 0;line-height:1.75}.daily-detail-grid .daily-warning{grid-column:1/-1;border-color:var(--red)}
 .share-status{min-height:24px;margin:8px 0 0;color:#aaa;text-align:center;font-size:12px}
 @media(max-width:600px){
   .oni-profile{margin-bottom:52px;padding-bottom:45px}
@@ -82,4 +84,5 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
   .oni-traits{grid-template-columns:1fr}.oni-traits .lucky-person{grid-column:auto}.oni-traits article{padding:18px}.oni-traits strong{font-size:16px}
   .hell-card{grid-template-columns:1fr}.hell-card>div{padding:21px}.hell-card>div+div{border-left:0;border-top:1px solid rgba(216,58,39,.45)}.hell-card h3{font-size:28px}.hell-card p{font-size:16px}
   .share-result{min-height:55px}
+  .daily-detail-grid{grid-template-columns:1fr}.daily-detail-grid .daily-warning{grid-column:auto}
 }

@@ -1,4 +1,6 @@
-from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, life_path_number, normalize_digits, premium_oni_type
+from datetime import date
+
+from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, life_path_number, normalize_digits, personal_day_number, premium_oni_type
 from analytics_report import parse_json_stream, summarize
 
 
@@ -55,6 +57,13 @@ def test_fortune_is_stable_for_same_inputs():
     assert daily_fortune("健太", "1990-01-01") == daily_fortune("健太", "1990-01-01")
 
 
+def test_personal_day_drives_daily_reading():
+    target = date(2026, 9, 6)
+    result = daily_fortune("健太", "1990-01-01", target)
+    assert result["personal_day"] == personal_day_number("1990-01-01", target)
+    assert all(key in result for key in ("social", "body", "best_time", "caution", "personal_reason"))
+
+
 def test_segmented_birthday_fields_submit_and_survive_errors():
     client = app.test_client()
     response = client.post("/fortune", data={"name": "健太", "birthday_year": "1990", "birthday_month": "1", "birthday_day": "1"})
@@ -102,6 +111,8 @@ def test_result_page():
     assert "気をつけるべき地獄" in response.text
     assert "data-share-weapon" in response.text
     assert "画像つきで鬼印を知らせる" in response.text
+    assert "今日の仕事運" in response.text
+    assert "今日の禁じ手" in response.text
     assert 'class="has-mobile-cta"' in response.text
 
 

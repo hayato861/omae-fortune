@@ -13,6 +13,7 @@
     <div><p class="rank">{{ fortune.rank }}</p><h1>{{ fortune.headline }}</h1></div>
   </div>
   <blockquote>{{ fortune.message }}</blockquote>
+  <p class="fortune-reason"><b>今日の読み筋：</b>{{ fortune.personal_reason }}</p>
 </section>
 
 <section class="result-body">
@@ -47,6 +48,15 @@
       <p class="section-number">本日の一手</p>
       <h2>{{ fortune.action }}</h2>
       <div class="lucky-row"><span>勝負色 <b>{{ fortune.color }}</b></span><span>勝負数 <b>{{ fortune.lucky_number }}</b></span></div>
+      <div class="daily-detail-grid">
+        <article><span>今日の仕事運</span><p>{{ fortune.work }}</p></article>
+        <article><span>今日の金運</span><p>{{ fortune.money }}</p></article>
+        <article><span>今日の恋愛運</span><p>{{ fortune.love }}</p></article>
+        <article><span>対人運</span><p>{{ fortune.social }}</p></article>
+        <article><span>心身の気配</span><p>{{ fortune.body }}</p></article>
+        <article><span>動くならこの刻</span><p>{{ fortune.best_time }}</p></article>
+        <article class="daily-warning"><span>今日の禁じ手</span><p>{{ fortune.caution }}</p></article>
+      </div>
     </div>
     <div class="locked-grid">
       <article><span>仕事運</span><h3>{{ fortune.work }}</h3></article>

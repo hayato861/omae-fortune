@@ -85,7 +85,23 @@ FORTUNES = [
         "action": "温かいものを食って深呼吸を三回",
         "color": "深緑",
     },
+    {"rank": "吉", "score": 79, "headline": "人の縁を侮るな、答えは向こうから歩いてくる", "message": "一人で片をつけるより、今日は人の知恵を借りたほうが早え。雑談の中に、止まっていた話を動かす鍵が紛れているぜ。", "work": "抱えた仕事を一つ見せろ。思わぬ助言が入る日だ。", "money": "共同購入や比較検討が吉。ひとりの勢いで決めるな。", "love": "用事がなくても声をかけろ。短いやり取りが縁を温める。", "action": "しばらく話していない相手へ一言送る", "color": "藤紫"},
+    {"rank": "中吉", "score": 71, "headline": "捨てる覚悟が、新しい席を空ける日だ", "message": "増やすばかりが前進じゃねえ。役目を終えた物、古い段取り、惰性の約束を一つ切れ。空いた場所に運が入り込む。", "work": "やらない仕事を一つ決めろ。大事な一件の精度が上がる。", "money": "使っていない契約を確認しな。小さな漏れを止める好機だ。", "love": "決めつけを捨てて、今の相手を見ろ。昔の採点表は役に立たねえ。", "action": "不要な物か予定を一つ手放す", "color": "墨黒"},
+    {"rank": "大吉", "score": 91, "headline": "仕込みは済んだ。今日は表へ打って出ろ", "message": "温めてきたもんを人目にさらす日だ。完璧じゃなくて構わねえ。見せて、聞いて、直す奴にだけ次の扉が開く。", "work": "企画や成果を共有しろ。反応を受けた分だけ完成へ近づく。", "money": "稼ぐための提案に追い風。値段と条件は堂々と口にしな。", "love": "遠回しはやめろ。会いたいなら、具体的な日時を出せ。", "action": "未完成でも一度、人に見せる", "color": "金茶"},
+    {"rank": "小吉", "score": 58, "headline": "止まるのも技だ。今日は足元の音を聞け", "message": "無理に流れを作ろうとすると空回りする。観察して、整えて、次の一手を小さく試せ。静かな日ほど本音がよく聞こえる。", "work": "結論より情報集め。見落とした条件を拾えば明日が楽になる。", "money": "大きく動かすな。残高と今月の予定を眺めるだけで十分だ。", "love": "沈黙を悪く取るな。相手にも考える間を渡してやれ。", "action": "予定を15分空けて何もしない", "color": "白銀"},
 ]
+
+DAY_DETAILS = {
+    1: {"focus": "開始と決断", "social": "先に結論を言うと話が通る。命令口調だけは封じろ。", "body": "頭が先走りやすい。肩と顎の力を抜け。", "best_time": "午前9時〜11時", "caution": "返事を待たずに走り出すこと"},
+    2: {"focus": "協力と調整", "social": "相手の言葉を一度言い換えて返せ。誤解がほどける。", "body": "冷えを溜めるな。温かい飲み物が味方だ。", "best_time": "午後2時〜4時", "caution": "遠慮を同意に見せること"},
+    3: {"focus": "表現と交流", "social": "面白がる姿勢が人を呼ぶ。自慢話は半分で切り上げろ。", "body": "喉と目を休ませろ。画面から離れる時間を作れ。", "best_time": "正午〜午後2時", "caution": "話を広げすぎて約束を忘れること"},
+    4: {"focus": "整理と土台固め", "social": "曖昧な約束を日時と担当に落とせ。信用が積み上がる。", "body": "腰と脚を動かせ。短い散歩でも効く。", "best_time": "午前8時〜10時", "caution": "正しさに固執して手段を変えないこと"},
+    5: {"focus": "変化と挑戦", "social": "普段話さねえ相手に縁がある。軽口の後の一言は丁寧にな。", "body": "刺激物と夜更かしは控えめに。勢いの反動が出やすい。", "best_time": "午後3時〜5時", "caution": "飽きた勢いで大事な物まで捨てること"},
+    6: {"focus": "責任と愛情", "social": "世話を焼く前に必要か聞け。それだけで親切が真っすぐ届く。", "body": "胃をいたわれ。急いで食うな。", "best_time": "午後5時〜7時", "caution": "他人の問題まで背負い込むこと"},
+    7: {"focus": "内省と見極め", "social": "大勢より信頼できる一人と話せ。浅い相づちより本音が効く。", "body": "神経を休ませる静かな時間を確保しろ。", "best_time": "午後8時〜10時", "caution": "考えを隠したまま理解を求めること"},
+    8: {"focus": "成果と交渉", "social": "数字と条件をはっきり出せ。筋を通せば強気で構わねえ。", "body": "緊張を溜めやすい。背中を伸ばして深く息を吐け。", "best_time": "午前10時〜正午", "caution": "勝つことに夢中で協力者を雑に扱うこと"},
+    9: {"focus": "完了と手放し", "social": "昔の貸し借りを清算しろ。礼か謝罪のどちらかを言葉にしな。", "body": "疲れが表へ出る日だ。風呂と睡眠を削るな。", "best_time": "午後6時〜8時", "caution": "終わった話を何度も裁き直すこと"},
+}
 
 LIFE_PATHS = {
     1: {"name": "一閃鬼", "role": "先陣を切る開拓者", "reading": "決める速さは天下一品。てめえが旗を立てりゃ、止まってた話も動き出す。", "weapon": "決断力と突破力", "weakness": "助けまで蹴飛ばす独断", "person": "冷静に反対意見を言える年上", "hell": "独走地獄", "escape": "決める前に一人だけ意見を聞け", "match": "岩城鬼", "clash": "覇道鬼"},
@@ -138,15 +154,34 @@ def premium_oni_type(name: str, birthday: str) -> dict[str, str]:
     }
 
 
-def daily_fortune(name: str, birthday: str) -> dict[str, object]:
-    seed_text = f"{date.today().isoformat()}:{name.strip()}:{birthday}"
+def reduce_number(value: int) -> int:
+    while value > 9:
+        value = sum(int(char) for char in str(value))
+    return value
+
+
+def personal_day_number(birthday: str, target_date: date) -> int:
+    born = date.fromisoformat(birthday)
+    personal_year = reduce_number(born.month + born.day + sum(int(c) for c in str(target_date.year)))
+    personal_month = reduce_number(personal_year + target_date.month)
+    return reduce_number(personal_month + target_date.day)
+
+
+def daily_fortune(name: str, birthday: str, target_date: date | None = None) -> dict[str, object]:
+    target_date = target_date or date.today()
+    seed_text = f"{target_date.isoformat()}:{name.strip()}:{birthday}"
     digest = hashlib.sha256(seed_text.encode("utf-8")).hexdigest()
     rng = random.Random(int(digest[:16], 16))
-    fortune = dict(rng.choice(FORTUNES))
+    day_number = personal_day_number(birthday, target_date)
+    fortune = dict(FORTUNES[day_number - 1])
+    fortune["score"] = max(40, min(98, fortune["score"] + rng.randint(-4, 4)))
+    fortune["rank"] = "大吉" if fortune["score"] >= 88 else "吉" if fortune["score"] >= 76 else "中吉" if fortune["score"] >= 66 else "小吉" if fortune["score"] >= 56 else "末吉"
     fortune["lucky_number"] = rng.randint(1, 99)
     number = life_path_number(birthday)
     oni_type = LIFE_PATHS[number]
     fortune.update(life_path=number, **oni_type)
+    fortune.update(personal_day=day_number, **DAY_DETAILS[day_number])
+    fortune["personal_reason"] = f"生来の『{oni_type['weapon']}』に、今日は「{DAY_DETAILS[day_number]['focus']}」の気が重なる。"
     fortune["premium_type"] = premium_oni_type(name, birthday)
     return fortune
 
