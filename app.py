@@ -169,7 +169,12 @@ def track_event():
 @app.post("/fortune")
 def fortune():
     name = request.form.get("name", "").strip()[:30]
+    birthday_year = request.form.get("birthday_year", "").strip()
+    birthday_month = request.form.get("birthday_month", "").strip()
+    birthday_day = request.form.get("birthday_day", "").strip()
     birthday = request.form.get("birthday", "")
+    if birthday_year or birthday_month or birthday_day:
+        birthday = f"{birthday_year}-{birthday_month.zfill(2)}-{birthday_day.zfill(2)}"
     try:
         birthday_is_valid = date.fromisoformat(birthday) <= date.today()
     except ValueError:
@@ -181,6 +186,9 @@ def fortune():
             error="名前と生年月日ぐれえ、しゃんと入れな！",
             name=name,
             birthday=birthday,
+            birthday_year=birthday_year,
+            birthday_month=birthday_month,
+            birthday_day=birthday_day,
         ), 400
     analytics_logger.info(json.dumps({"event": "fortune_completed"}, ensure_ascii=False))
     return render_template(

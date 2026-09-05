@@ -13,6 +13,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const form = document.querySelector("[data-fortune-form]");
+  const dateParts = [...document.querySelectorAll("[data-date-part]")];
+  dateParts.forEach((input, index) => {
+    input.addEventListener("input", () => {
+      input.value = input.value.replace(/\D/g, "").slice(0, input.maxLength);
+      if (input.value.length === input.maxLength && dateParts[index + 1]) {
+        dateParts[index + 1].focus();
+        dateParts[index + 1].select();
+      }
+    });
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Backspace" && input.value === "" && dateParts[index - 1]) {
+        dateParts[index - 1].focus();
+      }
+    });
+  });
+
   form?.addEventListener("submit", () => {
     track("fortune_started");
     const submit = form.querySelector('button[type="submit"]');

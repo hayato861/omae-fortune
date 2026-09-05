@@ -29,8 +29,15 @@
       {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
       <label for="name">呼ばれたい名前</label>
       <input id="name" name="name" value="{{ name or '' }}" maxlength="30" placeholder="例：健太" autocomplete="name" required{% if error and not name %} autofocus{% endif %}>
-      <label for="birthday">生年月日</label>
-      <input id="birthday" name="birthday" value="{{ birthday or '' }}" type="date" max="{{ today.isoformat() }}" required{% if error and name %} autofocus{% endif %}>
+      <fieldset class="birthday-fields" data-birthday-fields>
+        <legend>生年月日</legend>
+        <label><span>年</span><input name="birthday_year" value="{{ birthday_year or '' }}" inputmode="numeric" autocomplete="bday-year" maxlength="4" pattern="[0-9]{4}" placeholder="1990" aria-label="生まれた年" data-date-part required{% if error and name %} autofocus{% endif %}></label>
+        <i>年</i>
+        <label><span>月</span><input name="birthday_month" value="{{ birthday_month or '' }}" inputmode="numeric" autocomplete="bday-month" maxlength="2" pattern="[0-9]{1,2}" placeholder="01" aria-label="生まれた月" data-date-part required></label>
+        <i>月</i>
+        <label><span>日</span><input name="birthday_day" value="{{ birthday_day or '' }}" inputmode="numeric" autocomplete="bday-day" maxlength="2" pattern="[0-9]{1,2}" placeholder="01" aria-label="生まれた日" data-date-part required></label>
+        <i>日</i>
+      </fieldset>
       <button type="submit"><span>無料で一喝される</span><b aria-hidden="true">→</b></button>
       <small>入力内容は保存しません。占い結果の生成にのみ使います。</small>
     </form>

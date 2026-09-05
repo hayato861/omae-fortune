@@ -12,6 +12,7 @@ def test_home_page():
     assert '<span class="no-break">百烈鬼</span>' in response.text
     assert 'href="#main-content"' in response.text
     assert 'data-fortune-form' in response.text
+    assert response.text.count("data-date-part") == 3
 
 
 def test_fortune_requires_fields():
@@ -45,6 +46,16 @@ def test_render_log_summary_ignores_health_checks():
 
 def test_fortune_is_stable_for_same_inputs():
     assert daily_fortune("健太", "1990-01-01") == daily_fortune("健太", "1990-01-01")
+
+
+def test_segmented_birthday_fields_submit_and_survive_errors():
+    client = app.test_client()
+    response = client.post("/fortune", data={"name": "健太", "birthday_year": "1990", "birthday_month": "1", "birthday_day": "1"})
+    assert response.status_code == 200
+    invalid = client.post("/fortune", data={"name": "健太", "birthday_year": "1990", "birthday_month": "13", "birthday_day": "40"})
+    assert invalid.status_code == 400
+    assert 'value="1990"' in invalid.text
+    assert 'value="13"' in invalid.text
 
 
 def test_life_path_number():
