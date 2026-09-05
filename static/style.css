@@ -44,7 +44,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 }
 .copy-fallback{position:fixed;left:-9999px;top:0}
 .title-tail{display:block;text-align:right}.no-break{white-space:nowrap}
-.birthday-fields{display:grid;grid-template-columns:minmax(90px,1.7fr) auto minmax(56px,1fr) auto minmax(56px,1fr) auto;align-items:end;gap:8px;margin:0 0 24px;padding:0;border:0}.birthday-fields legend{display:block;width:100%;margin-bottom:10px;font-weight:700}.birthday-fields label{margin:0}.birthday-fields label span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.birthday-fields input{margin:0;text-align:center}.birthday-fields i{padding-bottom:13px;font-style:normal;font-weight:700;color:#aaa}
+.birthday-group{margin:0 0 24px}.birthday-group>p{margin:0 0 10px;font-weight:700}.birthday-fields{display:grid;grid-template-columns:minmax(90px,1.7fr) auto minmax(56px,1fr) auto minmax(56px,1fr) auto;align-items:end;gap:8px}.birthday-fields label{margin:0}.birthday-fields label span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.birthday-fields input{margin:0;text-align:center}.birthday-fields i{padding-bottom:13px;font-style:normal;font-weight:700;color:#aaa}
 @media(max-width:400px){.birthday-fields{gap:5px}.birthday-fields input{font-size:15px}}
 
 /* 有料版: 12守護鬼 × 五相 */

@@ -10,6 +10,7 @@ def test_home_page():
     assert "hyakuretsuki-v2.webp" in response.text
     assert 'class="title-tail"' in response.text
     assert '<span class="no-break">百烈鬼</span>' in response.text
+    assert 'class="birthday-group" role="group"' in response.text
     assert 'href="#main-content"' in response.text
     assert 'data-fortune-form' in response.text
     assert response.text.count("data-date-part") == 3
