@@ -1,4 +1,5 @@
 from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, life_path_number, premium_oni_type
+from analytics_report import parse_json_stream, summarize
 
 
 def test_home_page():
@@ -33,6 +34,13 @@ def test_analytics_accepts_only_known_anonymous_events():
     client = app.test_client()
     assert client.post("/events", json={"event": "share_completed"}).status_code == 204
     assert client.post("/events", json={"event": "unknown"}).status_code == 400
+
+
+def test_render_log_summary_ignores_health_checks():
+    raw = """{"message":"127.0.0.1 - - [date] \\\"GET / HTTP/1.1\\\" 200 100"}
+{"message":"127.0.0.1 - - [date] \\\"GET /healthz HTTP/1.1\\\" 200 16"}
+{"message":"{\\\"event\\\": \\\"share_completed\\\"}"}"""
+    assert summarize(parse_json_stream(raw)) == {"page_views": 1, "share_completed": 1}
 
 
 def test_fortune_is_stable_for_same_inputs():

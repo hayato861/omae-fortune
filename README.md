@@ -31,6 +31,14 @@ flask --app app run --debug
 
 個人情報やCookieを使わず、`fortune_started`、`fortune_completed`、`share_started`、`share_completed`、`premium_clicked` のイベント名だけをRenderログへ出力します。結果画面の共有ボタンは、氏名と生年月日を含まない鬼印PNGをブラウザー内で生成します。
 
+直近24時間の反応は次のコマンドで集計できます。Render CLIへのログインが必要です。
+
+```bash
+python analytics_report.py
+```
+
+期間を変える場合は `python analytics_report.py --hours 168` のように指定します。
+
 ## 有料化について
 
 現在の極み版ページは価格と特典を検証するための画面で、決済は発生しません。本番化では Stripe Checkout などをサーバー側で接続してください。
