@@ -1,4 +1,4 @@
-from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, life_path_number, premium_oni_type
+from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, life_path_number, normalize_digits, premium_oni_type
 from analytics_report import parse_json_stream, summarize
 
 
@@ -62,6 +62,15 @@ def test_segmented_birthday_fields_submit_and_survive_errors():
 def test_life_path_number():
     assert life_path_number("1995-12-05") == 5
     assert life_path_number("1990-01-01") == 3
+
+
+def test_full_width_birthday_digits_are_normalized():
+    assert normalize_digits("１９９０") == "1990"
+    response = app.test_client().post(
+        "/fortune",
+        data={"name": "健太", "birthday_year": "１９９０", "birthday_month": "０１", "birthday_day": "０１"},
+    )
+    assert response.status_code == 200
 
 
 def test_every_oni_type_has_complete_profile():

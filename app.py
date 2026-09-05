@@ -13,6 +13,11 @@ app = Flask(__name__)
 analytics_logger = logging.getLogger("fortune.analytics")
 analytics_logger.setLevel(logging.INFO)
 ALLOWED_EVENTS = {"fortune_started", "share_started", "share_completed", "premium_clicked"}
+FULL_WIDTH_DIGITS = str.maketrans("０１２３４５６７８９", "0123456789")
+
+
+def normalize_digits(value: str) -> str:
+    return value.translate(FULL_WIDTH_DIGITS)
 
 
 @app.after_request
@@ -169,9 +174,9 @@ def track_event():
 @app.post("/fortune")
 def fortune():
     name = request.form.get("name", "").strip()[:30]
-    birthday_year = request.form.get("birthday_year", "").strip()
-    birthday_month = request.form.get("birthday_month", "").strip()
-    birthday_day = request.form.get("birthday_day", "").strip()
+    birthday_year = normalize_digits(request.form.get("birthday_year", "").strip())
+    birthday_month = normalize_digits(request.form.get("birthday_month", "").strip())
+    birthday_day = normalize_digits(request.form.get("birthday_day", "").strip())
     birthday = request.form.get("birthday", "")
     if birthday_year or birthday_month or birthday_day:
         birthday = f"{birthday_year}-{birthday_month.zfill(2)}-{birthday_day.zfill(2)}"
