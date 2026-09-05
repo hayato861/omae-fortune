@@ -23,6 +23,12 @@ def test_fortune_requires_fields():
     assert 'role="alert"' in response.text
 
 
+def test_direct_fortune_visit_returns_to_entry():
+    response = app.test_client().get("/fortune")
+    assert response.status_code == 303
+    assert response.headers["Location"].endswith("/")
+
+
 def test_health_check_and_security_headers():
     client = app.test_client()
     response = client.get("/healthz")

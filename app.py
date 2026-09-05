@@ -6,7 +6,7 @@ import logging
 import random
 from datetime import date
 
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, url_for
 
 
 app = Flask(__name__)
@@ -203,6 +203,11 @@ def fortune():
         birthday=birthday,
         fortune=daily_fortune(name, birthday),
     )
+
+
+@app.get("/fortune")
+def fortune_entry():
+    return redirect(url_for("index"), code=303)
 
 
 @app.get("/premium")
