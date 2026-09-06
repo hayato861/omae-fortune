@@ -82,6 +82,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 .fortune-reason{margin:22px 0 0;color:var(--muted);font-size:14px}.fortune-reason b{color:var(--red)}
 .daily-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:42px 0 15px;text-align:left}.daily-detail-grid article{border:1px solid #514c43;background:#26231e;padding:22px}.daily-detail-grid span{color:var(--gold);font-size:12px;font-weight:900;letter-spacing:.08em}.daily-detail-grid p{margin:10px 0 0;line-height:1.75}.daily-detail-grid .daily-warning{grid-column:1/-1;border-color:var(--red)}
 .share-status{min-height:24px;margin:8px 0 0;color:#aaa;text-align:center;font-size:12px}
+.share-help{margin:9px 0 0;color:#aaa;text-align:center;font-size:12px;line-height:1.6}
 @media(max-width:600px){
   .oni-profile{margin-bottom:52px;padding-bottom:45px}
   .oni-title-row{align-items:flex-start;gap:17px}

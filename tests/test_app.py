@@ -133,7 +133,8 @@ def test_result_page():
     assert "12守護鬼 × 5つの相 = 全60鬼" in response.text
     assert "気をつけるべき地獄" in response.text
     assert "data-share-weapon" in response.text
-    assert "画像つきで鬼印を知らせる" in response.text
+    assert "画像つきで結果を共有する（X・LINEなど）" in response.text
+    assert "この占いのURLも一緒に入る" in response.text
     assert "今日の仕事運" in response.text
     assert "今日の禁じ手" in response.text
     assert "百烈鬼の見立て、どうだった？" in response.text
