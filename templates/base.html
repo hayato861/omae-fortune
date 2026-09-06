@@ -10,6 +10,16 @@
   <meta property="og:site_name" content="百烈鬼の鬼占">
   <meta property="og:title" content="{% block og_title %}お前のためだけの占い｜百烈鬼の鬼占{% endblock %}">
   <meta property="og:description" content="やれるもんならやってみろ、嘘はつくじゃねえ！">
+  <meta property="og:url" content="{{ request.url }}">
+  <meta property="og:image" content="{{ url_for('static', filename='og-card.png', _external=True) }}">
+  <meta property="og:image:width" content="1730">
+  <meta property="og:image:height" content="909">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% block twitter_title %}お前は何鬼だ？｜百烈鬼の鬼占{% endblock %}">
+  <meta name="twitter:description" content="全十二の守護鬼から、てめえの一鬼を暴く。登録不要・無料。">
+  <meta name="twitter:image" content="{{ url_for('static', filename='og-card.png', _external=True) }}">
+  <link rel="icon" href="{{ url_for('static', filename='x-icon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='x-icon.png') }}">
   <title>{% block title %}お前のためだけの占い{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

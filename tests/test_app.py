@@ -17,6 +17,8 @@ def test_home_page():
     assert 'href="#main-content"' in response.text
     assert 'data-fortune-form' in response.text
     assert response.text.count("data-date-part") == 3
+    assert 'name="twitter:card" content="summary_large_image"' in response.text
+    assert "og-card.png" in response.text
     assert "全12守護鬼" in response.text
     assert "壱　小便小僧" in response.text
     assert '<span class="no-break">てめえの性根と</span>' in response.text
