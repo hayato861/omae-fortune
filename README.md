@@ -41,4 +41,6 @@ python analytics_report.py
 
 ## 有料化について
 
-現在の極み版ページは価格と特典を検証するための画面で、決済は発生しません。本番化では Stripe Checkout などをサーバー側で接続してください。
+Stripe Checkoutの一回払い・月額払い、決済結果確認、署名付きWebhookの受信口を実装しています。鍵が未設定の環境では購入ボタンが無効になります。
+
+Renderには `STRIPE_SECRET_KEY` と `STRIPE_WEBHOOK_SECRET` を秘密の環境変数として設定します。価格IDと公開URLは `render.yaml` に定義済みです。Webhook URLは `https://omae-fortune.onrender.com/stripe/webhook` とし、少なくとも `checkout.session.completed`、`invoice.paid`、`customer.subscription.deleted` を購読してください。テスト用と本番用の鍵・価格IDを混在させないでください。

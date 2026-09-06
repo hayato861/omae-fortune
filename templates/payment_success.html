@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}支払い完了｜百烈鬼の鬼占{% endblock %}
+{% block header_cta %}<a class="header-cta" href="{{ url_for('index') }}">無料占いへ戻る</a>{% endblock %}
+{% block content %}
+<section class="premium-hero shell">
+  <p class="eyebrow">PAYMENT COMPLETE</p>
+  <h1>支払いは通った。<br><em>次は極み鑑定だ。</em></h1>
+  <p>決済を確認した。極み鑑定の入力画面は現在接続準備中です。</p>
+  <a class="header-cta" href="{{ url_for('index') }}">無料占いへ戻る</a>
+</section>
+{% endblock %}

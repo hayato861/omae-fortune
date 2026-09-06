@@ -10,3 +10,13 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.13.5
+      - key: APP_BASE_URL
+        value: https://omae-fortune.onrender.com
+      - key: STRIPE_SINGLE_PRICE_ID
+        value: price_1UCU2F3rpcL4W2F47dOzMHPe
+      - key: STRIPE_MONTHLY_PRICE_ID
+        value: price_1UCU2e3rpcL4W2F47y8XNTl1
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false

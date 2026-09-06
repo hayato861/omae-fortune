@@ -3,10 +3,12 @@ from __future__ import annotations
 import hashlib
 import json
 import logging
+import os
 import random
 from datetime import date
 
 from flask import Flask, redirect, render_template, request, url_for
+import stripe
 
 
 app = Flask(__name__)
@@ -14,6 +16,10 @@ analytics_logger = logging.getLogger("fortune.analytics")
 analytics_logger.setLevel(logging.INFO)
 ALLOWED_EVENTS = {"fortune_started", "share_started", "share_completed", "premium_clicked"}
 FULL_WIDTH_DIGITS = str.maketrans("０１２３４５６７８９", "0123456789")
+STRIPE_PLANS = {
+    "single": {"mode": "payment", "price_env": "STRIPE_SINGLE_PRICE_ID"},
+    "monthly": {"mode": "subscription", "price_env": "STRIPE_MONTHLY_PRICE_ID"},
+}
 
 
 def normalize_digits(value: str) -> str:
@@ -251,7 +257,63 @@ def premium():
         "premium.html",
         oni_count=len(LIFE_PATHS) * len(ONI_ASPECTS),
         aspects=ONI_ASPECTS,
+        stripe_configured=bool(os.getenv("STRIPE_SECRET_KEY")),
     )
+
+
+@app.post("/checkout/<plan>")
+def create_checkout(plan: str):
+    plan_config = STRIPE_PLANS.get(plan)
+    secret_key = os.getenv("STRIPE_SECRET_KEY")
+    price_id = os.getenv(plan_config["price_env"]) if plan_config else None
+    if not plan_config or not secret_key or not price_id:
+        return render_template(
+            "premium.html",
+            oni_count=len(LIFE_PATHS) * len(ONI_ASPECTS),
+            aspects=ONI_ASPECTS,
+            stripe_configured=False,
+            payment_error="決済口を仕込んでいる最中だ。もう少し待ちな！",
+        ), 503
+
+    base_url = os.getenv("APP_BASE_URL", request.url_root.rstrip("/"))
+    client = stripe.StripeClient(secret_key, max_network_retries=2)
+    checkout = client.v1.checkout.sessions.create({
+        "mode": plan_config["mode"],
+        "line_items": [{"price": price_id, "quantity": 1}],
+        "success_url": f"{base_url}/checkout/success?session_id={{CHECKOUT_SESSION_ID}}",
+        "cancel_url": f"{base_url}/premium",
+        "allow_promotion_codes": False,
+    })
+    analytics_logger.info(json.dumps({"event": "checkout_started", "plan": plan}, ensure_ascii=False))
+    return redirect(checkout.url, code=303)
+
+
+@app.get("/checkout/success")
+def checkout_success():
+    secret_key = os.getenv("STRIPE_SECRET_KEY")
+    session_id = request.args.get("session_id", "")
+    if not secret_key or not session_id.startswith("cs_"):
+        return redirect(url_for("premium"), code=303)
+    client = stripe.StripeClient(secret_key, max_network_retries=2)
+    checkout = client.v1.checkout.sessions.retrieve(session_id)
+    paid = checkout.status == "complete" and checkout.payment_status in {"paid", "no_payment_required"}
+    if not paid:
+        return render_template("payment_pending.html"), 402
+    return render_template("payment_success.html", customer_email=checkout.customer_details.email if checkout.customer_details else None)
+
+
+@app.post("/stripe/webhook")
+def stripe_webhook():
+    secret = os.getenv("STRIPE_WEBHOOK_SECRET")
+    if not secret:
+        return "webhook not configured", 503
+    try:
+        event = stripe.Webhook.construct_event(request.get_data(), request.headers.get("Stripe-Signature", ""), secret)
+    except (ValueError, stripe.SignatureVerificationError):
+        return "invalid webhook", 400
+    if event["type"] in {"checkout.session.completed", "invoice.paid", "customer.subscription.deleted"}:
+        analytics_logger.info(json.dumps({"event": "stripe_event", "type": event["type"]}, ensure_ascii=False))
+    return "", 204
 
 
 if __name__ == "__main__":

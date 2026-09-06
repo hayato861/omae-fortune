@@ -128,3 +128,20 @@ def test_premium_page_promises_sixty_oni():
     assert "百烈鬼通い手形" in response.text
     assert "300</b>円" in response.text
     assert "800</b>円" not in response.text
+
+
+def test_checkout_stays_disabled_without_server_side_keys():
+    client = app.test_client()
+    response = client.post("/checkout/single")
+    assert response.status_code == 503
+    assert "決済口を仕込んでいる最中" in response.text
+
+
+def test_checkout_success_rejects_missing_session():
+    response = app.test_client().get("/checkout/success")
+    assert response.status_code == 303
+    assert response.headers["Location"].endswith("/premium")
+
+
+def test_webhook_rejects_requests_when_unconfigured():
+    assert app.test_client().post("/stripe/webhook", data=b"{}").status_code == 503

@@ -19,16 +19,17 @@
       <span class="price-badge">まずは一度</span><h2>初回極み鑑定</h2>
       <p><b>100</b>円 <small>税込 / 一回払い</small></p>
       <ul><li>全{{ oni_count }}鬼から、てめえの完全鬼名を特定</li><li>仕事・銭・恋から一つを深掘り</li><li>具体的な悩みに百烈鬼が回答</li><li>今日から七日間の行動指南</li><li>登録不要・自動更新なし</li></ul>
-      <button type="button" disabled>初回100円で一喝される</button>
-      <small>現在は先行準備中です。決済は発生しません。</small>
+      <form action="{{ url_for('create_checkout', plan='single') }}" method="post"><button type="submit" {% if not stripe_configured %}disabled{% endif %}>初回100円で一喝される</button></form>
+      <small>{% if stripe_configured %}Stripeの安全な決済画面へ移動します。{% else %}現在は先行準備中です。決済は発生しません。{% endif %}</small>
     </div>
     <div class="price-card">
       <span class="price-badge">毎日通うなら</span><h2>百烈鬼通い手形</h2>
       <p><b>300</b>円 <small>税込 / 月額</small></p>
       <ul><li>毎日の極み鑑定を何度でも</li><li>全{{ oni_count }}鬼の詳細鑑定</li><li>週ごとの運勢と七日間の行動指南</li><li>相性のいい鬼・衝突する鬼の攻略</li><li>いつでも解約可能</li></ul>
-      <button type="button" disabled>通い手形を待つ</button>
-      <small>月額版も準備中です。まだ登録されません。</small>
+      <form action="{{ url_for('create_checkout', plan='monthly') }}" method="post"><button type="submit" {% if not stripe_configured %}disabled{% endif %}>月額300円で手形を持つ</button></form>
+      <small>{% if stripe_configured %}月額契約はいつでも解約できます。{% else %}月額版も準備中です。まだ登録されません。{% endif %}</small>
     </div>
   </div>
+  {% if payment_error %}<p class="form-error" role="alert">{{ payment_error }}</p>{% endif %}
 </section>
 {% endblock %}
