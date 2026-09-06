@@ -6,8 +6,8 @@
 {% block content %}
 <section class="premium-hero shell">
   <p class="eyebrow">BERANMEE KIWAMI</p>
-  <h1>十二鬼じゃ浅すぎる。<br><em>極みは、全{{ oni_count }}鬼。</em></h1>
-  <p>無料版の12守護鬼を、鬼性が現れる五つの相で細分化。仕事、銭、人間関係で「なぜ同じ失敗をするか」まで暴いてやる。</p>
+  <h1>無料鑑定は、全十二鬼。<br><em>極みは、全{{ oni_count }}鬼。</em></h1>
+  <p>無料版では、生年月日から12守護鬼のうち一鬼を判定。極み版では、その一鬼を「刃・鎧・炎・影・王」の五つの相に分け、仕事、銭、人間関係で「なぜ同じ失敗をするか」まで暴いてやる。</p>
   <div class="aspect-grid">
     {% for aspect in aspects %}
       <article><span>{{ "%02d"|format(loop.index) }}</span><h2>{{ aspect.name }}</h2><p>{{ aspect.title }}</p><small>{{ aspect.gift }}</small></article>

@@ -26,7 +26,7 @@
       data-share-weakness="{{ fortune.weakness }}"
       data-share-hell="{{ fortune.hell }}"
       data-card-image="{{ url_for('static', filename='hyakuretsuki-v2.webp') }}">
-      <p class="section-number">百烈鬼が暴く、てめえの鬼印</p>
+      <p class="section-number">無料鑑定・全12守護鬼から出た、てめえの鬼印</p>
       <div class="oni-title-row">
         <div class="type-number"><small>鬼ナンバー</small><strong>{{ fortune.life_path }}</strong></div>
         <div><p class="oni-kicker">てめえの守護鬼は——</p><h2>{{ fortune.name }}</h2><p class="oni-role">{{ fortune.role }}</p></div>
@@ -64,8 +64,8 @@
       <article><span>恋愛運</span><h3>{{ fortune.love }}</h3></article>
       <div class="lock-overlay">
         <div class="lock-icon">錠</div>
-        <p>守護鬼は同じでも、その現れ方は五つある</p>
-        <h2>てめえだけの「{{ fortune.premium_type.full_name }}」<br>全60鬼の詳細鑑定へ</h2>
+        <p>無料版で選ばれた一鬼を、五つの相でさらに見抜く</p>
+        <h2>12守護鬼 × 5つの相 = 全60鬼<br>てめえは「{{ fortune.premium_type.full_name }}」</h2>
         <a href="{{ url_for('premium') }}" data-track="premium_clicked">有料鑑定の中身を見る →</a>
         <small>現在は先行準備中・決済は発生しません</small>
       </div>

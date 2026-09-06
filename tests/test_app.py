@@ -16,6 +16,7 @@ def test_home_page():
     assert 'href="#main-content"' in response.text
     assert 'data-fortune-form' in response.text
     assert response.text.count("data-date-part") == 3
+    assert "全12守護鬼" in response.text
 
 
 def test_fortune_requires_fields():
@@ -108,6 +109,8 @@ def test_result_page():
     assert "極み版" in response.text
     assert "守護鬼" in response.text
     assert "鬼ナンバー" in response.text
+    assert "全12守護鬼から出た" in response.text
+    assert "12守護鬼 × 5つの相 = 全60鬼" in response.text
     assert "気をつけるべき地獄" in response.text
     assert "data-share-weapon" in response.text
     assert "画像つきで鬼印を知らせる" in response.text
@@ -127,6 +130,7 @@ def test_premium_page_promises_sixty_oni():
     response = app.test_client().get("/premium")
     assert response.status_code == 200
     assert "全60鬼" in response.text
+    assert "無料鑑定は、全十二鬼" in response.text
     assert "迷いを断ち、最短の一手を選ぶ" in response.text
     assert "無料占いへ戻る" in response.text
     assert "極み版を見る" not in response.text
