@@ -5,7 +5,19 @@
 <section class="premium-hero shell">
   <p class="eyebrow">PAYMENT COMPLETE</p>
   <h1>支払いは通った。<br><em>次は極み鑑定だ。</em></h1>
-  <p>銭は確かに受け取った。極み鑑定の入口を開けるまで、そこで待ってな。</p>
-  <a class="header-cta" href="{{ url_for('index') }}">無料占いへ戻る</a>
+  <p>銭は確かに受け取った。名前と生年月日、それから今いちばん見抜いてほしいものを置いていけ。</p>
+  {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+  <form class="fortune-form premium-input" action="{{ url_for('paid_premium_report') }}" method="post">
+    <input type="hidden" name="session_id" value="{{ session_id or request.args.get('session_id', '') }}">
+    <label for="premium-name">呼ばれたい名前</label><input id="premium-name" name="name" maxlength="30" required>
+    <label for="premium-birthday">生年月日</label><input id="premium-birthday" name="birthday" type="date" required>
+    <label for="concern">いま見抜いてほしいもの</label>
+    <select id="concern" name="concern" required>
+      {% for key, item in (concerns or {}).items() %}<option value="{{ key }}">{{ item.label }}</option>{% endfor %}
+      {% if not concerns %}<option value="work">仕事</option><option value="money">銭</option><option value="love">恋</option><option value="life">生き方</option>{% endif %}
+    </select>
+    <button type="submit"><span>極みまで見抜かせる</span><b>→</b></button>
+    <small>入力内容は鑑定にだけ使う。保存はしねえ。</small>
+  </form>
 </section>
 {% endblock %}

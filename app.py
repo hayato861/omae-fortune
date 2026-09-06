@@ -5,7 +5,7 @@ import json
 import logging
 import os
 import random
-from datetime import date
+from datetime import date, timedelta
 
 from flask import Flask, redirect, render_template, request, url_for
 import stripe
@@ -14,11 +14,17 @@ import stripe
 app = Flask(__name__)
 analytics_logger = logging.getLogger("fortune.analytics")
 analytics_logger.setLevel(logging.INFO)
-ALLOWED_EVENTS = {"fortune_started", "share_started", "share_completed", "premium_clicked"}
+ALLOWED_EVENTS = {"fortune_started", "share_started", "share_completed", "premium_clicked", "fortune_helpful", "fortune_missed"}
 FULL_WIDTH_DIGITS = str.maketrans("０１２３４５６７８９", "0123456789")
 STRIPE_PLANS = {
     "single": {"mode": "payment", "price_env": "STRIPE_SINGLE_PRICE_ID"},
     "monthly": {"mode": "subscription", "price_env": "STRIPE_MONTHLY_PRICE_ID"},
+}
+CONCERNS = {
+    "work": {"label": "仕事", "opening": "働き方の癖は、てめえの鬼の武器と弱点がいちばん露骨に出る場所だ。", "move": "成果を一つに絞り、誰が見ても分かる形で残せ", "avoid": "評価を焦って手柄を独り占めすること"},
+    "money": {"label": "銭", "opening": "銭は欲の鏡だ。稼ぎ方より、何に怯えて使うかに性根が出る。", "move": "今月の固定費を一つ見直し、残す金の行き先を先に決めろ", "avoid": "不安を消すためだけの衝動買い"},
+    "love": {"label": "恋", "opening": "惚れた相手の前じゃ、強みと弱みは同じ顔で現れやがる。", "move": "察してもらうのをやめ、望みを短い言葉で一つ伝えろ", "avoid": "返事を勝手に想像して先に傷つくこと"},
+    "life": {"label": "生き方", "opening": "道に迷うのは、道がねえからじゃない。捨てたくねえ道が多すぎるからだ。", "move": "今後三か月で守るものを一つだけ紙に書け", "avoid": "全部を同時に立て直そうとすること"},
 }
 
 
@@ -192,6 +198,38 @@ def daily_fortune(name: str, birthday: str, target_date: date | None = None) -> 
     return fortune
 
 
+def premium_report(name: str, birthday: str, concern: str, target_date: date | None = None) -> dict[str, object]:
+    target_date = target_date or date.today()
+    concern_data = CONCERNS.get(concern, CONCERNS["life"])
+    oni = LIFE_PATHS[life_path_number(birthday)]
+    complete = premium_oni_type(name, birthday)
+    seven_days = []
+    for offset in range(7):
+        day = target_date + timedelta(days=offset)
+        reading = daily_fortune(name, birthday, day)
+        seven_days.append({
+            "date": day,
+            "focus": reading["focus"],
+            "action": reading["action"],
+            "score": reading["score"],
+        })
+    return {
+        **complete,
+        "base_name": oni["name"],
+        "role": oni["role"],
+        "reading": oni["reading"],
+        "weapon": oni["weapon"],
+        "weakness": oni["weakness"],
+        "hell": oni["hell"],
+        "escape": oni["escape"],
+        "concern": concern_data,
+        "verdict": f"『{complete['gift']}』が、てめえの突破口だ。ただし『{complete['trap']}』へ落ちれば、持ち味がそのまま仇になる。",
+        "move": concern_data["move"],
+        "avoid": concern_data["avoid"],
+        "seven_days": seven_days,
+    }
+
+
 @app.get("/")
 def index():
     return render_template("index.html", today=date.today())
@@ -300,6 +338,28 @@ def checkout_success():
     if not paid:
         return render_template("payment_pending.html"), 402
     return render_template("payment_success.html", customer_email=checkout.customer_details.email if checkout.customer_details else None)
+
+
+@app.post("/premium/report")
+def paid_premium_report():
+    secret_key = os.getenv("STRIPE_SECRET_KEY")
+    session_id = request.form.get("session_id", "")
+    if not secret_key or not session_id.startswith("cs_"):
+        return redirect(url_for("premium"), code=303)
+    client = stripe.StripeClient(secret_key, max_network_retries=2)
+    checkout = client.v1.checkout.sessions.retrieve(session_id)
+    if checkout.status != "complete" or checkout.payment_status not in {"paid", "no_payment_required"}:
+        return render_template("payment_pending.html"), 402
+    name = request.form.get("name", "").strip()[:30]
+    birthday = normalize_digits(request.form.get("birthday", "").strip())
+    concern = request.form.get("concern", "life")
+    try:
+        birthday_is_valid = date.fromisoformat(birthday) <= date.today()
+    except ValueError:
+        birthday_is_valid = False
+    if not name or not birthday_is_valid or concern not in CONCERNS:
+        return render_template("payment_success.html", session_id=session_id, concerns=CONCERNS, error="名前、生年月日、悩みをしゃんと入れな！"), 400
+    return render_template("premium_result.html", name=name, report=premium_report(name, birthday, concern))
 
 
 @app.post("/stripe/webhook")

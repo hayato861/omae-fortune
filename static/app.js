@@ -12,6 +12,14 @@ document.addEventListener("DOMContentLoaded", () => {
     link.addEventListener("click", () => track(link.dataset.track));
   });
 
+  const feedback = document.querySelector("[data-feedback]");
+  feedback?.querySelectorAll("button").forEach((feedbackButton) => {
+    feedbackButton.addEventListener("click", () => {
+      feedback.querySelectorAll("button").forEach((item) => { item.disabled = true; });
+      feedback.querySelector("small").textContent = "受け取った。次の見立てに活かしてやる。";
+    }, { once: true });
+  });
+
   const form = document.querySelector("[data-fortune-form]");
   const dateParts = [...document.querySelectorAll("[data-date-part]")];
   dateParts.forEach((input, index) => {

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ name }}の極み鑑定｜百烈鬼の鬼占{% endblock %}
+{% block header_cta %}<a class="header-cta" href="{{ url_for('index') }}">無料占いへ戻る</a>{% endblock %}
+{% block content %}
+<section class="result-hero shell premium-verdict">
+  <p class="eyebrow">全60鬼・極み鑑定 / {{ report.concern.label }}</p>
+  <p class="oni-kicker">{{ name }}、てめえの完全鬼名は——</p>
+  <h1>{{ report.full_name }}</h1>
+  <p class="lead">{{ report.title }}。{{ report.concern.opening }}</p>
+  <blockquote>{{ report.verdict }}</blockquote>
+</section>
+<section class="result-body"><div class="shell premium-report">
+  <div class="oni-traits">
+    <article><span>生来の武器</span><strong>{{ report.weapon }}</strong></article>
+    <article><span>見落とす弱点</span><strong>{{ report.weakness }}</strong></article>
+    <article><span>{{ report.aspect }}の力</span><strong>{{ report.gift }}</strong></article>
+    <article><span>{{ report.aspect }}の罠</span><strong>{{ report.trap }}</strong></article>
+  </div>
+  <div class="hell-card"><div><span>落ちやすい地獄</span><h3>{{ report.hell }}</h3></div><div class="hell-escape"><span>抜け出す掟</span><p>{{ report.escape }}</p></div></div>
+  <section class="premium-orders"><p class="section-number">百烈鬼の結論</p><h2>{{ report.move }}</h2><p><b>これだけはやるな：</b>{{ report.avoid }}</p></section>
+  <section class="seven-days"><p class="section-number">七日間の行動指南</p><div class="seven-day-grid">{% for day in report.seven_days %}<article><span>{{ day.date.strftime('%m/%d') }}</span><b>{{ day.score }}点・{{ day.focus }}</b><p>{{ day.action }}</p></article>{% endfor %}</div></section>
+  <section class="compatibility"><p class="section-number">鬼の相性</p><p>組めば強い鬼：<b>{{ report.match }}</b>　／　ぶつかりやすい鬼：<b>{{ report.clash }}</b></p></section>
+  <a class="text-link" href="{{ url_for('index') }}">← 無料占いへ戻る</a>
+</div></section>
+{% endblock %}

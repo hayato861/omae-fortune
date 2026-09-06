@@ -72,6 +72,8 @@ def main() -> None:
         ("fortune_completed", "鑑定完了"),
         ("share_started", "共有操作"),
         ("share_completed", "共有完了"),
+        ("fortune_helpful", "刺さった"),
+        ("fortune_missed", "見当違い"),
         ("premium_clicked", "極み版クリック"),
         ("premium_views", "極み版表示"),
     )

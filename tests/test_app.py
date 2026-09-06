@@ -1,6 +1,6 @@
 from datetime import date
 
-from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, life_path_number, normalize_digits, personal_day_number, premium_oni_type
+from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, life_path_number, normalize_digits, personal_day_number, premium_oni_type, premium_report
 from analytics_report import parse_json_stream, summarize
 
 
@@ -45,6 +45,7 @@ def test_analytics_accepts_only_known_anonymous_events():
     client = app.test_client()
     assert client.post("/events", json={"event": "share_completed"}).status_code == 204
     assert client.post("/events", json={"event": "unknown"}).status_code == 400
+    assert client.post("/events", json={"event": "fortune_helpful"}).status_code == 204
 
 
 def test_render_log_summary_ignores_health_checks():
@@ -101,6 +102,13 @@ def test_premium_has_sixty_oni_combinations():
     assert result["full_name"].endswith(tuple(aspect["name"] for aspect in ONI_ASPECTS))
 
 
+def test_premium_report_contains_concern_and_seven_days():
+    result = premium_report("健太", "1990-01-01", "work", date(2026, 9, 6))
+    assert result["concern"]["label"] == "仕事"
+    assert len(result["seven_days"]) == 7
+    assert result["full_name"].startswith("火遊鬼")
+
+
 def test_result_page():
     client = app.test_client()
     response = client.post("/fortune", data={"name": "健太", "birthday": "1990-01-01"})
@@ -116,6 +124,7 @@ def test_result_page():
     assert "画像つきで鬼印を知らせる" in response.text
     assert "今日の仕事運" in response.text
     assert "今日の禁じ手" in response.text
+    assert "百烈鬼の見立て、どうだった？" in response.text
     assert 'class="has-mobile-cta"' in response.text
 
 
@@ -141,6 +150,7 @@ def test_premium_page_promises_sixty_oni():
     assert "800</b>円" not in response.text
     assert "今は一銭も取らねえ" in response.text
     assert "勝手に登録なんざしねえ" in response.text
+    assert "通い手形は準備中" in response.text
 
 
 def test_checkout_stays_disabled_without_server_side_keys():

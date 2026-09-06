@@ -58,6 +58,11 @@
         <article class="daily-warning"><span>今日の禁じ手</span><p>{{ fortune.caution }}</p></article>
       </div>
     </div>
+    <div class="fortune-feedback" data-feedback>
+      <p>百烈鬼の見立て、どうだった？</p>
+      <div><button type="button" data-track="fortune_helpful">刺さった</button><button type="button" data-track="fortune_missed">見当違いだ</button></div>
+      <small aria-live="polite"></small>
+    </div>
     <div class="locked-grid">
       <article><span>仕事運</span><h3>{{ fortune.work }}</h3></article>
       <article><span>金運</span><h3>{{ fortune.money }}</h3></article>
