@@ -139,6 +139,8 @@ def test_premium_page_promises_sixty_oni():
     assert "百烈鬼通い手形" in response.text
     assert "300</b>円" in response.text
     assert "800</b>円" not in response.text
+    assert "今は一銭も取らねえ" in response.text
+    assert "勝手に登録なんざしねえ" in response.text
 
 
 def test_checkout_stays_disabled_without_server_side_keys():
