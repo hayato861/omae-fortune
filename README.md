@@ -44,3 +44,5 @@ python analytics_report.py
 Stripe Checkoutの一回払い・月額払い、決済結果確認、署名付きWebhookの受信口を実装しています。鍵が未設定の環境では購入ボタンが無効になります。
 
 Renderには `STRIPE_SECRET_KEY` と `STRIPE_WEBHOOK_SECRET` を秘密の環境変数として設定します。価格IDと公開URLは `render.yaml` に定義済みです。Webhook URLは `https://omae-fortune.onrender.com/stripe/webhook` とし、少なくとも `checkout.session.completed`、`invoice.paid`、`customer.subscription.deleted` を購読してください。テスト用と本番用の鍵・価格IDを混在させないでください。
+
+購入済み鑑定の復元には `PAYMENT_DATA_KEY` も必要です。32文字以上のランダムな秘密値を設定してください。鑑定入力はこの鍵で暗号化してStripe Checkout Sessionのmetadataへ保存し、専用URLから同じ結果を復元します。鍵を変更すると既存の鑑定を復号できなくなるため、運用開始後は変更しないでください。

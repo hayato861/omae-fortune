@@ -20,6 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { once: true });
   });
 
+  const recoveryButton = document.querySelector("[data-copy-url]");
+  recoveryButton?.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(recoveryButton.dataset.copyUrl);
+    recoveryButton.parentElement.querySelector("small").textContent = "控えを写した。なくすんじゃねえぞ。";
+  });
+
   const form = document.querySelector("[data-fortune-form]");
   const dateParts = [...document.querySelectorAll("[data-date-part]")];
   dateParts.forEach((input, index) => {

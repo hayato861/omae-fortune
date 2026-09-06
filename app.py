@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import base64
 import json
 import logging
 import os
@@ -9,6 +10,7 @@ from datetime import date, timedelta
 
 from flask import Flask, redirect, render_template, request, url_for
 import stripe
+from cryptography.fernet import Fernet, InvalidToken
 
 
 app = Flask(__name__)
@@ -30,6 +32,36 @@ CONCERNS = {
 
 def normalize_digits(value: str) -> str:
     return value.translate(FULL_WIDTH_DIGITS)
+
+
+def payment_cipher() -> Fernet | None:
+    secret = os.getenv("PAYMENT_DATA_KEY", "")
+    if len(secret) < 32:
+        return None
+    key = base64.urlsafe_b64encode(hashlib.sha256(secret.encode("utf-8")).digest())
+    return Fernet(key)
+
+
+def encrypt_reading_data(name: str, birthday: str, concern: str) -> str:
+    cipher = payment_cipher()
+    if not cipher:
+        raise RuntimeError("PAYMENT_DATA_KEY is not configured")
+    payload = json.dumps({"name": name, "birthday": birthday, "concern": concern}, ensure_ascii=False, separators=(",", ":"))
+    return cipher.encrypt(payload.encode("utf-8")).decode("ascii")
+
+
+def decrypt_reading_data(token: str) -> dict[str, str] | None:
+    cipher = payment_cipher()
+    if not cipher or not token:
+        return None
+    try:
+        return json.loads(cipher.decrypt(token.encode("ascii")).decode("utf-8"))
+    except (InvalidToken, ValueError, UnicodeDecodeError, json.JSONDecodeError):
+        return None
+
+
+def checkout_is_paid(checkout) -> bool:
+    return checkout.status == "complete" and checkout.payment_status in {"paid", "no_payment_required"}
 
 
 @app.after_request
@@ -295,7 +327,7 @@ def premium():
         "premium.html",
         oni_count=len(LIFE_PATHS) * len(ONI_ASPECTS),
         aspects=ONI_ASPECTS,
-        stripe_configured=bool(os.getenv("STRIPE_SECRET_KEY")),
+        stripe_configured=bool(os.getenv("STRIPE_SECRET_KEY") and os.getenv("STRIPE_SINGLE_PRICE_ID") and payment_cipher()),
     )
 
 
@@ -334,10 +366,12 @@ def checkout_success():
         return redirect(url_for("premium"), code=303)
     client = stripe.StripeClient(secret_key, max_network_retries=2)
     checkout = client.v1.checkout.sessions.retrieve(session_id)
-    paid = checkout.status == "complete" and checkout.payment_status in {"paid", "no_payment_required"}
-    if not paid:
+    if not checkout_is_paid(checkout):
         return render_template("payment_pending.html"), 402
-    return render_template("payment_success.html", customer_email=checkout.customer_details.email if checkout.customer_details else None)
+    encrypted = checkout.metadata.get("reading_data") if checkout.metadata else None
+    if encrypted and decrypt_reading_data(encrypted):
+        return redirect(url_for("recover_premium_report", session_id=session_id), code=303)
+    return render_template("payment_success.html", session_id=session_id, concerns=CONCERNS, customer_email=checkout.customer_details.email if checkout.customer_details else None)
 
 
 @app.post("/premium/report")
@@ -348,7 +382,7 @@ def paid_premium_report():
         return redirect(url_for("premium"), code=303)
     client = stripe.StripeClient(secret_key, max_network_retries=2)
     checkout = client.v1.checkout.sessions.retrieve(session_id)
-    if checkout.status != "complete" or checkout.payment_status not in {"paid", "no_payment_required"}:
+    if not checkout_is_paid(checkout):
         return render_template("payment_pending.html"), 402
     name = request.form.get("name", "").strip()[:30]
     birthday = normalize_digits(request.form.get("birthday", "").strip())
@@ -359,7 +393,24 @@ def paid_premium_report():
         birthday_is_valid = False
     if not name or not birthday_is_valid or concern not in CONCERNS:
         return render_template("payment_success.html", session_id=session_id, concerns=CONCERNS, error="名前、生年月日、悩みをしゃんと入れな！"), 400
-    return render_template("premium_result.html", name=name, report=premium_report(name, birthday, concern))
+    encrypted = encrypt_reading_data(name, birthday, concern)
+    client.v1.checkout.sessions.update(session_id, {"metadata": {"reading_data": encrypted, "reading_saved": "true"}})
+    return redirect(url_for("recover_premium_report", session_id=session_id), code=303)
+
+
+@app.get("/premium/report/<session_id>")
+def recover_premium_report(session_id: str):
+    secret_key = os.getenv("STRIPE_SECRET_KEY")
+    if not secret_key or not session_id.startswith("cs_"):
+        return redirect(url_for("premium"), code=303)
+    client = stripe.StripeClient(secret_key, max_network_retries=2)
+    checkout = client.v1.checkout.sessions.retrieve(session_id)
+    encrypted = checkout.metadata.get("reading_data") if checkout.metadata else None
+    data = decrypt_reading_data(encrypted)
+    if not checkout_is_paid(checkout) or not data:
+        return redirect(url_for("checkout_success", session_id=session_id), code=303)
+    report = premium_report(data["name"], data["birthday"], data["concern"])
+    return render_template("premium_result.html", name=data["name"], report=report, recovery_url=request.url)
 
 
 @app.post("/stripe/webhook")

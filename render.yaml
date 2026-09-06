@@ -20,3 +20,5 @@ services:
         sync: false
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
+      - key: PAYMENT_DATA_KEY
+        sync: false

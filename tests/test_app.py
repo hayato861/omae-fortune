@@ -1,6 +1,6 @@
 from datetime import date
 
-from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, life_path_number, normalize_digits, personal_day_number, premium_oni_type, premium_report
+from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, decrypt_reading_data, encrypt_reading_data, life_path_number, normalize_digits, personal_day_number, premium_oni_type, premium_report
 from analytics_report import parse_json_stream, summarize
 
 
@@ -107,6 +107,15 @@ def test_premium_report_contains_concern_and_seven_days():
     assert result["concern"]["label"] == "仕事"
     assert len(result["seven_days"]) == 7
     assert result["full_name"].startswith("火遊鬼")
+
+
+def test_paid_reading_data_is_encrypted_and_recoverable(monkeypatch):
+    monkeypatch.setenv("PAYMENT_DATA_KEY", "test-key-that-is-longer-than-thirty-two-characters")
+    token = encrypt_reading_data("健太", "1990-01-01", "work")
+    assert "健太" not in token
+    assert decrypt_reading_data(token) == {"name": "健太", "birthday": "1990-01-01", "concern": "work"}
+    tampered = token[:20] + ("A" if token[20] != "A" else "B") + token[21:]
+    assert decrypt_reading_data(tampered) is None
 
 
 def test_result_page():
