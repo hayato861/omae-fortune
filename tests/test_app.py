@@ -18,7 +18,8 @@ def test_home_page():
     assert 'data-fortune-form' in response.text
     assert response.text.count("data-date-part") == 3
     assert "全12守護鬼" in response.text
-    assert "小便小僧、てめえの性根" in response.text
+    assert "壱　小便小僧" in response.text
+    assert '<span class="no-break">てめえの性根と</span>' in response.text
     assert "名と生まれ日はこの場の占いにしか使わぬ" in response.text
     assert "あとに残して嗅ぎ回ったりもせぬ" in response.text
 
