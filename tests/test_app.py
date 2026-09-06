@@ -116,6 +116,13 @@ def test_result_page():
     assert 'class="has-mobile-cta"' in response.text
 
 
+def test_share_message_includes_site_url():
+    script = app.test_client().get("/static/app.js").text
+    assert "const shareUrl" in script
+    assert "${shareUrl}\\n#百烈鬼の鬼占" in script
+    assert "url: shareUrl" in script
+
+
 def test_premium_page_promises_sixty_oni():
     response = app.test_client().get("/premium")
     assert response.status_code == 200

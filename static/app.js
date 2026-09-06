@@ -132,7 +132,8 @@ document.addEventListener("DOMContentLoaded", () => {
   button.addEventListener("click", async () => {
     const profile = document.querySelector(".oni-profile");
     const status = document.querySelector(".share-status");
-    const text = `俺の守護鬼は「${profile.dataset.shareOni}」だった。気をつけるべきは「${profile.dataset.shareHell}」だとよ。\nお前は何鬼だ？\n#百烈鬼の鬼占 #鬼印診断`;
+    const shareUrl = `${window.location.origin}/`;
+    const text = `俺の守護鬼は「${profile.dataset.shareOni}」だった。気をつけるべきは「${profile.dataset.shareHell}」だとよ。\nお前は何鬼だ？\n${shareUrl}\n#百烈鬼の鬼占 #鬼印診断`;
     track("share_started");
     button.disabled = true;
     status.textContent = "鬼印を焼きつけてる…";
@@ -140,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = await makeCard(profile);
       const file = new File([blob], "oni-jirushi.png", { type: "image/png" });
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ title: "百烈鬼の鬼印診断", text, url: window.location.origin, files: [file] });
+        await navigator.share({ title: "百烈鬼の鬼印診断", text, url: shareUrl, files: [file] });
         status.textContent = "知らせてやったぜ。";
         track("share_completed");
       } else {
@@ -149,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
         download.download = "oni-jirushi.png";
         download.click();
         URL.revokeObjectURL(download.href);
-        await navigator.clipboard?.writeText(`${text}\n${window.location.origin}`);
+        await navigator.clipboard?.writeText(text);
         status.textContent = "鬼印画像を保存したぜ。投稿文もコピーした。";
         track("share_completed");
       }
