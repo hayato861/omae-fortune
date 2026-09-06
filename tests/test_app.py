@@ -1,4 +1,5 @@
 from datetime import date
+from pathlib import Path
 
 from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, decrypt_reading_data, encrypt_reading_data, life_path_number, normalize_digits, personal_day_number, premium_oni_type, premium_report
 from analytics_report import parse_json_stream, summarize
@@ -17,6 +18,8 @@ def test_home_page():
     assert 'data-fortune-form' in response.text
     assert response.text.count("data-date-part") == 3
     assert "全12守護鬼" in response.text
+    assert "小便小僧、てめえの性根" in response.text
+    assert "あとに残して嗅ぎ回ったりもしねえ" in response.text
 
 
 def test_fortune_requires_fields():
@@ -173,6 +176,11 @@ def test_checkout_success_rejects_missing_session():
     response = app.test_client().get("/checkout/success")
     assert response.status_code == 303
     assert response.headers["Location"].endswith("/premium")
+
+
+def test_paid_form_explains_encrypted_storage_in_oni_voice():
+    template = (Path(app.root_path) / "templates/payment_success.html").read_text()
+    assert "暗号にして預かる" in template
 
 
 def test_webhook_rejects_requests_when_unconfigured():
