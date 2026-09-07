@@ -44,7 +44,7 @@ def build() -> Path:
     result_html = result_html.replace('data-card-image="/static/', 'data-card-image="static/')
     result_html = result_html.replace('href="/premium"', f'href="{BACKEND_ORIGIN}/premium"')
     result_html = result_html.replace('href="/"', 'href="./"')
-    result_html = result_html.replace('<body class="has-mobile-cta">', f'<body class="has-mobile-cta" data-backend-origin="{BACKEND_ORIGIN}" data-static-result>')
+    result_html = result_html.replace('<body class="has-mobile-cta">', f'<body class="has-mobile-cta" data-backend-origin="{BACKEND_ORIGIN}" data-public-origin="{PAGES_ORIGIN}" data-static-result>')
     data = json.dumps({"fortunes": FORTUNES, "days": DAY_DETAILS, "oni": LIFE_PATHS, "aspects": ONI_ASPECTS}, ensure_ascii=False, separators=(",", ":"))
     result_html = result_html.replace('</body>', f'<script>window.FORTUNE_DATA={data};</script><script src="static/static-fortune.js"></script></body>')
     (OUTPUT / "result.html").write_text(result_html, encoding="utf-8")

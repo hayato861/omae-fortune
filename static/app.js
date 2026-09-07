@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", () => {
   button.addEventListener("click", async () => {
     const profile = document.querySelector(".oni-profile");
     const status = document.querySelector(".share-status");
-    const shareUrl = `${window.location.origin}/`;
+    const shareUrl = `${document.body.dataset.publicOrigin || window.location.origin}/`;
     const text = `俺の守護鬼は「${profile.dataset.shareOni}」だった。気をつけるべきは「${profile.dataset.shareHell}」だとよ。\nお前は何鬼だ？\n${shareUrl}\n#鬼印診断 #無料占い`;
     track("share_started");
     button.disabled = true;
