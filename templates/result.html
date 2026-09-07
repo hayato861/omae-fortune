@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ name }}の今日の運勢｜お前のためだけの占い{% endblock %}
 {% block description %}{{ name }}の今日の運勢は{{ fortune.rank }}、{{ fortune.score }}点。守護鬼「{{ fortune.name }}」から今日の一手を授けます。{% endblock %}
-{% block og_title %}{{ name }}の守護鬼は「{{ fortune.name }}」｜百烈鬼の鬼占{% endblock %}
+{% block og_title %}{{ name }}の守護鬼は「{{ fortune.name }}」｜鬼印診断{% endblock %}
 {% block body_class %}has-mobile-cta{% endblock %}
 {% block content %}
 <section class="result-hero shell">
@@ -60,7 +60,7 @@
       </div>
     </div>
     <div class="fortune-feedback" data-feedback>
-      <p>百烈鬼の見立て、どうだった？</p>
+      <p>名もなき鬼の見立て、どうだった？</p>
       <div><button type="button" data-track="fortune_helpful">刺さった</button><button type="button" data-track="fortune_missed">見当違いだ</button></div>
       <small aria-live="polite"></small>
     </div>
@@ -80,6 +80,6 @@
   </div>
 </section>
 <a class="mobile-bottom-cta" href="{{ url_for('premium') }}" data-track="premium_clicked">
-  <small>百烈鬼の個別鑑定</small><strong>続きを見る　→</strong>
+  <small>名もなき鬼の個別鑑定</small><strong>続きを見る　→</strong>
 </a>
 {% endblock %}

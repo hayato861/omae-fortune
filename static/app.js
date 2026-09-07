@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
     track("fortune_started");
     const submit = form.querySelector('button[type="submit"]');
     submit.disabled = true;
-    submit.querySelector("span").textContent = "百烈鬼が見抜いてる…";
+    submit.querySelector("span").textContent = "鬼が見抜いている…";
     form.setAttribute("aria-busy", "true");
   });
 
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     context.fillRect(0, 0, 18, 630);
     context.fillStyle = "#d3a62c";
     context.font = '700 24px "Zen Kaku Gothic New", sans-serif';
-    context.fillText("百烈鬼が暴く、てめえの鬼印", 70, 70);
+    context.fillText("名もなき鬼が暴く、てめえの鬼印", 70, 70);
 
     context.fillStyle = "#ffffff";
     context.font = '800 72px "Shippori Mincho", serif';
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const profile = document.querySelector(".oni-profile");
     const status = document.querySelector(".share-status");
     const shareUrl = `${window.location.origin}/`;
-    const text = `俺の守護鬼は「${profile.dataset.shareOni}」だった。気をつけるべきは「${profile.dataset.shareHell}」だとよ。\nお前は何鬼だ？\n${shareUrl}\n#百烈鬼の鬼占 #鬼印診断`;
+    const text = `俺の守護鬼は「${profile.dataset.shareOni}」だった。気をつけるべきは「${profile.dataset.shareHell}」だとよ。\nお前は何鬼だ？\n${shareUrl}\n#鬼印診断 #無料占い`;
     track("share_started");
     button.disabled = true;
     status.textContent = "鬼印を焼きつけてる…";
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = await makeCard(profile);
       const file = new File([blob], "oni-jirushi.png", { type: "image/png" });
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ title: "百烈鬼の鬼印診断", text, url: shareUrl, files: [file] });
+        await navigator.share({ title: "名もなき鬼の鬼印診断", text, url: shareUrl, files: [file] });
         status.textContent = "知らせてやったぜ。";
         track("share_completed");
       } else {

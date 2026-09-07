@@ -14,6 +14,7 @@ from cryptography.fernet import Fernet, InvalidToken
 
 
 app = Flask(__name__)
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 3600
 analytics_logger = logging.getLogger("fortune.analytics")
 analytics_logger.setLevel(logging.INFO)
 ALLOWED_EVENTS = {"fortune_started", "share_started", "share_completed", "premium_clicked", "fortune_helpful", "fortune_missed"}

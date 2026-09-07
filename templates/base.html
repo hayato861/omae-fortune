@@ -4,22 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11100e">
-  <meta name="description" content="{% block description %}嘘を見抜く鬼・百烈鬼が、お前のためだけに今日の運勢と守護鬼を鑑定。{% endblock %}">
+  <meta name="description" content="{% block description %}名を持たぬ鬼が、お前のためだけに今日の運勢と守護鬼を鑑定。{% endblock %}">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ja_JP">
-  <meta property="og:site_name" content="百烈鬼の鬼占">
-  <meta property="og:title" content="{% block og_title %}お前のためだけの占い｜百烈鬼の鬼占{% endblock %}">
+  <meta property="og:site_name" content="お前のためだけの占い">
+  <meta property="og:title" content="{% block og_title %}お前のためだけの占い｜鬼印診断{% endblock %}">
   <meta property="og:description" content="やれるもんならやってみろ、嘘はつくじゃねえ！">
   <meta property="og:url" content="{{ request.url }}">
   <meta property="og:image" content="{{ url_for('static', filename='og-card.png', _external=True) }}">
   <meta property="og:image:width" content="1730">
   <meta property="og:image:height" content="909">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{% block twitter_title %}お前は何鬼だ？｜百烈鬼の鬼占{% endblock %}">
+  <meta name="twitter:title" content="{% block twitter_title %}お前は何鬼だ？｜鬼印診断{% endblock %}">
   <meta name="twitter:description" content="全十二の守護鬼から、てめえの一鬼を暴く。登録不要・無料。">
   <meta name="twitter:image" content="{{ url_for('static', filename='og-card.png', _external=True) }}">
-  <link rel="icon" href="{{ url_for('static', filename='x-icon.png') }}">
-  <link rel="apple-touch-icon" href="{{ url_for('static', filename='x-icon.png') }}">
+  <link rel="icon" href="{{ url_for('static', filename='site-icon.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='site-icon.png') }}">
+  <link rel="preload" as="image" href="{{ url_for('static', filename='hyakuretsuki-v2.webp') }}" fetchpriority="high">
   <title>{% block title %}お前のためだけの占い{% endblock %}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

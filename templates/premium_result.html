@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ name }}の極み鑑定｜百烈鬼の鬼占{% endblock %}
+{% block title %}{{ name }}の極み鑑定｜鬼印診断{% endblock %}
 {% block header_cta %}<a class="header-cta" href="{{ url_for('index') }}">無料占いへ戻る</a>{% endblock %}
 {% block content %}
 <section class="result-hero shell premium-verdict">
@@ -17,7 +17,7 @@
     <article><span>{{ report.aspect }}の罠</span><strong>{{ report.trap }}</strong></article>
   </div>
   <div class="hell-card"><div><span>落ちやすい地獄</span><h3>{{ report.hell }}</h3></div><div class="hell-escape"><span>抜け出す掟</span><p>{{ report.escape }}</p></div></div>
-  <section class="premium-orders"><p class="section-number">百烈鬼の結論</p><h2>{{ report.move }}</h2><p><b>これだけはやるな：</b>{{ report.avoid }}</p></section>
+  <section class="premium-orders"><p class="section-number">鬼の結論</p><h2>{{ report.move }}</h2><p><b>これだけはやるな：</b>{{ report.avoid }}</p></section>
   <section class="seven-days"><p class="section-number">七日間の行動指南</p><div class="seven-day-grid">{% for day in report.seven_days %}<article><span>{{ day.date.strftime('%m/%d') }}</span><b>{{ day.score }}点・{{ day.focus }}</b><p>{{ day.action }}</p></article>{% endfor %}</div></section>
   <section class="compatibility"><p class="section-number">鬼の相性</p><p>組めば強い鬼：<b>{{ report.match }}</b>　／　ぶつかりやすい鬼：<b>{{ report.clash }}</b></p></section>
   <section class="recovery-card"><p class="section-number">鑑定書の控え</p><h2>この頁を取っておけ</h2><p>通信が切れても、この専用URLを開けば同じ鑑定書を何度でも読める。人に渡すんじゃねえぞ。</p><button type="button" data-copy-url="{{ recovery_url }}">専用URLをコピーする</button><small aria-live="polite"></small></section>

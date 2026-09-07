@@ -12,7 +12,7 @@ def test_home_page():
     assert "お前のためだけの占い" in response.text
     assert "hyakuretsuki-v2.webp" in response.text
     assert 'class="title-tail"' in response.text
-    assert '<span class="no-break">百烈鬼</span>' in response.text
+    assert "名を持たぬ鬼" in response.text
     assert 'class="birthday-group" role="group"' in response.text
     assert 'href="#main-content"' in response.text
     assert 'data-fortune-form' in response.text
@@ -141,14 +141,14 @@ def test_result_page():
     assert "この占いのURLも一緒に入る" in response.text
     assert "今日の仕事運" in response.text
     assert "今日の禁じ手" in response.text
-    assert "百烈鬼の見立て、どうだった？" in response.text
+    assert "名もなき鬼の見立て、どうだった？" in response.text
     assert 'class="has-mobile-cta"' in response.text
 
 
 def test_share_message_includes_site_url():
     script = app.test_client().get("/static/app.js").text
     assert "const shareUrl" in script
-    assert "${shareUrl}\\n#百烈鬼の鬼占" in script
+    assert "${shareUrl}\\n#鬼印診断" in script
     assert "url: shareUrl" in script
 
 
@@ -162,7 +162,7 @@ def test_premium_page_promises_sixty_oni():
     assert "極み版を見る" not in response.text
     assert "初回極み鑑定" in response.text
     assert "100</b>円" in response.text
-    assert "百烈鬼通い手形" in response.text
+    assert "鬼の通い手形" in response.text
     assert "300</b>円" in response.text
     assert "800</b>円" not in response.text
     assert "今は一銭も取らねえ" in response.text

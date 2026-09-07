@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}極み版｜お前のためだけの占い{% endblock %}
-{% block description %}12守護鬼×五つの相、全60鬼から完全鬼名を特定する「百烈鬼の鬼占 極み版」の鑑定内容。{% endblock %}
-{% block og_title %}全60鬼の個別鑑定・極み版｜百烈鬼の鬼占{% endblock %}
+{% block description %}12守護鬼×五つの相、全60鬼から完全鬼名を特定する「鬼の極み版」の鑑定内容。{% endblock %}
+{% block og_title %}全60鬼の個別鑑定・極み版｜鬼印診断{% endblock %}
 {% block header_cta %}<a class="header-cta" href="{{ url_for('index') }}">無料占いへ戻る</a>{% endblock %}
 {% block content %}
 <section class="premium-hero shell">
@@ -18,12 +18,12 @@
     <div class="price-card price-card-featured">
       <span class="price-badge">まずは一度</span><h2>初回極み鑑定</h2>
       <p><b>100</b>円 <small>税込 / 一回払い</small></p>
-      <ul><li>全{{ oni_count }}鬼から、てめえの完全鬼名を特定</li><li>仕事・銭・恋から一つを深掘り</li><li>具体的な悩みに百烈鬼が回答</li><li>今日から七日間の行動指南</li><li>登録不要・自動更新なし</li></ul>
+      <ul><li>全{{ oni_count }}鬼から、てめえの完全鬼名を特定</li><li>仕事・銭・恋から一つを深掘り</li><li>具体的な悩みに名もなき鬼が回答</li><li>今日から七日間の行動指南</li><li>登録不要・自動更新なし</li></ul>
       <form action="{{ url_for('create_checkout', plan='single') }}" method="post"><button type="submit" {% if not stripe_configured %}disabled{% endif %}>初回100円で一喝される</button></form>
       <small>{% if stripe_configured %}この先はStripeの決済場だ。銭の始末は安全にやる。{% else %}極み版はまだ仕込み中だ。今は一銭も取らねえ。{% endif %}</small>
     </div>
     <div class="price-card">
-      <span class="price-badge">毎日通うなら</span><h2>百烈鬼通い手形</h2>
+      <span class="price-badge">毎日通うなら</span><h2>鬼の通い手形</h2>
       <p><b>300</b>円 <small>税込 / 月額</small></p>
       <ul><li>毎日の極み鑑定を何度でも</li><li>全{{ oni_count }}鬼の詳細鑑定</li><li>週ごとの運勢と七日間の行動指南</li><li>相性のいい鬼・衝突する鬼の攻略</li><li>いつでも解約可能</li></ul>
       <button type="button" disabled>通い手形は準備中</button>
