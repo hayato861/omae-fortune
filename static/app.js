@@ -1,10 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const backendOrigin = document.body.dataset.backendOrigin || window.location.origin;
+  if (backendOrigin !== window.location.origin) {
+    fetch(`${backendOrigin}/healthz`, { mode: "no-cors", cache: "no-store" }).catch(() => {});
+  }
+
   const track = (event) => {
     const body = JSON.stringify({ event });
     if (navigator.sendBeacon) {
-      navigator.sendBeacon("/events", new Blob([body], { type: "application/json" }));
+      navigator.sendBeacon(`${backendOrigin}/events`, new Blob([body], { type: "text/plain" }));
     } else {
-      fetch("/events", { method: "POST", headers: { "Content-Type": "application/json" }, body, keepalive: true }).catch(() => {});
+      fetch(`${backendOrigin}/events`, { method: "POST", headers: { "Content-Type": "text/plain" }, body, keepalive: true, mode: "no-cors" }).catch(() => {});
     }
   };
 

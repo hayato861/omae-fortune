@@ -3,6 +3,7 @@ from pathlib import Path
 
 from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, decrypt_reading_data, encrypt_reading_data, life_path_number, normalize_digits, personal_day_number, premium_oni_type, premium_report
 from analytics_report import parse_json_stream, summarize
+from build_pages import BACKEND_ORIGIN, build
 
 
 def test_home_page():
@@ -53,6 +54,16 @@ def test_analytics_accepts_only_known_anonymous_events():
     assert client.post("/events", json={"event": "share_completed"}).status_code == 204
     assert client.post("/events", json={"event": "unknown"}).status_code == 400
     assert client.post("/events", json={"event": "fortune_helpful"}).status_code == 204
+    assert client.post("/events", data='{"event":"fortune_started"}', content_type="text/plain").status_code == 204
+
+
+def test_static_landing_warms_backend_and_posts_to_render():
+    output = build()
+    html = (output / "index.html").read_text()
+    assert f'action="{BACKEND_ORIGIN}/fortune"' in html
+    assert f'data-backend-origin="{BACKEND_ORIGIN}"' in html
+    assert 'href="static/style.css"' in html
+    assert (output / "static/hyakuretsuki-v2.webp").exists()
 
 
 def test_render_log_summary_ignores_health_checks():

@@ -276,6 +276,11 @@ def healthz():
 @app.post("/events")
 def track_event():
     payload = request.get_json(silent=True) or {}
+    if not payload and request.get_data():
+        try:
+            payload = json.loads(request.get_data())
+        except (TypeError, ValueError, json.JSONDecodeError):
+            payload = {}
     event = payload.get("event")
     if event not in ALLOWED_EVENTS:
         return {"error": "invalid event"}, 400
