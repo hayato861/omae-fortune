@@ -62,8 +62,13 @@ def test_static_landing_warms_backend_and_posts_to_render():
     html = (output / "index.html").read_text()
     assert f'action="{BACKEND_ORIGIN}/fortune"' in html
     assert f'data-backend-origin="{BACKEND_ORIGIN}"' in html
+    assert 'data-static-fortune' in html
+    assert 'static/static-fortune.js' in html
     assert 'href="static/style.css"' in html
     assert (output / "static/hyakuretsuki-v2.webp").exists()
+    result = (output / "result.html").read_text()
+    assert 'data-static-result' in result
+    assert 'window.FORTUNE_DATA=' in result
 
 
 def test_render_log_summary_ignores_health_checks():
