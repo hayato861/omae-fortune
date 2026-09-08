@@ -1,5 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
   const backendOrigin = document.body.dataset.backendOrigin || window.location.origin;
+  const dailyHook = document.querySelector("[data-daily-hook]");
+  if (dailyHook) {
+    const hooks = [
+      "今日の鬼くじ：迷ってる暇があるなら、まず一歩だけ踏み出せ。",
+      "今日の鬼くじ：返事を先延ばしにするな。短い一言が流れを変える。",
+      "今日の鬼くじ：人の目より、明日のてめえが納得する方を選べ。",
+      "今日の鬼くじ：捨てるものを一つ決めろ。空いた場所に運が入る。",
+      "今日の鬼くじ：うまく見せるな。続けられる形に整えろ。",
+      "今日の鬼くじ：今日は誰か一人に、本音をひとつ伝えろ。",
+      "今日の鬼くじ：休むのも一手だ。疲れたままの決断は鬼でも鈍る。",
+    ];
+    const japanDate = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    const daySeed = Number(japanDate.replace(/-/g, ""));
+    dailyHook.textContent = `${hooks[daySeed % hooks.length]}　明日は別の一喝をくれてやる。`;
+  }
   if (backendOrigin !== window.location.origin) {
     fetch(`${backendOrigin}/healthz`, { mode: "no-cors", cache: "no-store" }).catch(() => {});
   }
