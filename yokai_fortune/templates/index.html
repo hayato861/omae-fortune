@@ -11,6 +11,7 @@
     <p class="eyebrow">第二夜・百鬼夜行モード（試作）</p>
     <h1>見えないものが、<br><em>お前を見ている。</em></h1>
     <p class="lead">名前と生年月日を置いていけ。十二の妖怪のうち、今夜てめえの背後に立つものを読む。</p>
+    <img class="yokai-hero" src="{{ url_for('static', filename='yokai-night-procession.png') }}" alt="月夜の参道に現れた妖怪たち" width="1536" height="1024">
     {% if error %}<p class="error">{{ error }}</p>{% endif %}
     <form method="post">
       <label>呼ばれたい名前<input name="name" value="{{ name }}" placeholder="例：健太" required></label>
