@@ -35,6 +35,12 @@ def yokai_reading(name: str, birthday: str) -> dict[str, str]:
 def index():
     name = request.form.get("name", "").strip()
     birthday = request.form.get("birthday", "")
+    if request.method == "POST" and not birthday:
+        birthday = "-".join([
+            request.form.get("birthday_year", ""),
+            request.form.get("birthday_month", ""),
+            request.form.get("birthday_day", ""),
+        ])
     reading = None
     error = None
     if request.method == "POST":
@@ -46,7 +52,9 @@ def index():
             error = "名前と生年月日を、静かに置いていけ。"
         else:
             reading = yokai_reading(name, birthday)
-    return render_template("index.html", name=name, birthday=birthday, reading=reading, error=error)
+            return render_template("result.html", name=name, reading=reading)
+    birthday_parts = birthday.split("-") if birthday.count("-") == 2 else ["", "", ""]
+    return render_template("index.html", name=name, birthday=birthday, birthday_year=birthday_parts[0], birthday_month=birthday_parts[1], birthday_day=birthday_parts[2], reading=reading, error=error)
 
 
 if __name__ == "__main__":

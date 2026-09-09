@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ name }}の百鬼夜行｜名もなきものの占い</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="result-page">
+    <p class="eyebrow">今夜、てめえの後ろにいるもの</p>
+    <h1>{{ reading.creature }}</h1>
+    <p class="title">{{ reading.title }}</p>
+    <blockquote>「{{ reading.advice }}」</blockquote>
+    <p class="omen">今夜の兆し：{{ reading.omen }}つ。明日になれば、別のものが見える。</p>
+    <a class="back" href="/">もう一度、夜の帳をめくる</a>
+  </main>
+</body>
+</html>

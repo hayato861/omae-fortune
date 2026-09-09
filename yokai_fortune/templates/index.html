@@ -4,6 +4,7 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>百鬼夜行｜名もなきものの占い</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
   <main>
@@ -13,7 +14,14 @@
     {% if error %}<p class="error">{{ error }}</p>{% endif %}
     <form method="post">
       <label>呼ばれたい名前<input name="name" value="{{ name }}" placeholder="例：健太" required></label>
-      <label>生年月日<input name="birthday" type="date" value="{{ birthday }}" required></label>
+      <fieldset>
+        <legend>生年月日</legend>
+        <div class="birthday-fields">
+          <input name="birthday_year" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" value="{{ birthday_year }}" placeholder="1990" aria-label="生まれた年" data-date-part required><span>年</span>
+          <input name="birthday_month" inputmode="numeric" maxlength="2" pattern="[0-9]{1,2}" value="{{ birthday_month }}" placeholder="01" aria-label="生まれた月" data-date-part required><span>月</span>
+          <input name="birthday_day" inputmode="numeric" maxlength="2" pattern="[0-9]{1,2}" value="{{ birthday_day }}" placeholder="01" aria-label="生まれた日" data-date-part required><span>日</span>
+        </div>
+      </fieldset>
       <button>夜の帳をめくる　→</button>
     </form>
     {% if reading %}
