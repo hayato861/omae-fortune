@@ -15,6 +15,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const daySeed = Number(japanDate.replace(/-/g, ""));
     dailyHook.textContent = `${hooks[daySeed % hooks.length]}　明日は別の一喝をくれてやる。`;
   }
+  const visitStreak = document.querySelector("[data-visit-streak]");
+  if (visitStreak) {
+    const streakKey = "oni-visit-streak";
+    let previous = null;
+    try { previous = JSON.parse(localStorage.getItem(streakKey) || "null"); } catch (_) {}
+    const japanDate = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    const today = new Date(`${japanDate}T00:00:00Z`);
+    const previousDate = previous?.date ? new Date(`${previous.date}T00:00:00Z`) : null;
+    const elapsed = previousDate ? Math.round((today - previousDate) / 86400000) : null;
+    const streak = elapsed === 1 ? Number(previous.streak || 1) + 1 : elapsed === 0 ? Number(previous.streak || 1) : 1;
+    try { localStorage.setItem(streakKey, JSON.stringify({ date: japanDate, streak })); } catch (_) {}
+    visitStreak.textContent = streak > 1
+      ? `鬼詣で ${streak}日目。明日も来れば、さらに一日積み上がる。`
+      : "鬼詣で 1日目。明日も来れば、鬼詣でが続く。";
+  }
   if (backendOrigin !== window.location.origin) {
     fetch(`${backendOrigin}/healthz`, { mode: "no-cors", cache: "no-store" }).catch(() => {});
   }
