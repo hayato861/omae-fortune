@@ -15,10 +15,10 @@
     <blockquote>「{{ reading.advice }}」</blockquote>
     <p class="omen">今夜の兆し：{{ reading.omen }}つ。明日になれば、別のものが見える。</p>
     <section class="reading-details">
-      <article><span>この妖怪の性質</span><strong>{{ reading.nature }}</strong></article>
-      <article><span>今夜の気配</span><p>{{ reading.sign }}</p></article>
-      <article><span>取るべき一手</span><p>{{ reading.move }}</p></article>
-      <article><span>避けるもの</span><p>{{ reading.avoid }}</p></article>
+      <details><summary><span>この妖怪の性質</span><strong>{{ reading.nature }}</strong><b>詳しく読む　＋</b></summary><p>{{ reading.nature_detail }}</p></details>
+      <details><summary><span>今夜の気配</span><strong>{{ reading.sign }}</strong><b>詳しく読む　＋</b></summary><p>{{ reading.sign_detail }}</p></details>
+      <details><summary><span>取るべき一手</span><strong>{{ reading.move }}</strong><b>詳しく読む　＋</b></summary><p>{{ reading.move_detail }}</p></details>
+      <details><summary><span>避けるもの</span><strong>{{ reading.avoid }}</strong><b>詳しく読む　＋</b></summary><p>{{ reading.avoid_detail }}</p></details>
     </section>
     <a class="back" href="/">もう一度、夜の帳をめくる</a>
   </main>

@@ -50,7 +50,14 @@ def yokai_reading(name: str, birthday: str) -> dict[str, str]:
     creature, title, advice = YOKAI[digest[0] % len(YOKAI)]
     omen = (digest[1] % 5) + 1
     nature, sign, move, avoid = YOKAI_DETAILS[creature]
-    return {"creature": creature, "title": title, "advice": advice, "omen": str(omen), "image": YOKAI_IMAGES[creature], "nature": nature, "sign": sign, "move": move, "avoid": avoid}
+    return {
+        "creature": creature, "title": title, "advice": advice, "omen": str(omen), "image": YOKAI_IMAGES[creature],
+        "nature": nature, "sign": sign, "move": move, "avoid": avoid,
+        "nature_detail": f"{nature}の気配が強い夜だ。自分では見慣れた癖の中に、今夜だけ表へ出る力がある。{advice}",
+        "sign_detail": f"{sign}。焦って答えを出すより、周囲の変化を一つ拾えば流れが読める。今夜の兆しは{omen}つだ。",
+        "move_detail": f"最初の一手は『{move}』。大きく変えようとせず、十分以内に始められる形まで小さくしろ。",
+        "avoid_detail": f"『{avoid}』が今夜の落とし穴だ。やりたくなったら、ひと呼吸おいて明日の自分へ回せ。",
+    }
 
 
 @app.route("/", methods=["GET", "POST"])
