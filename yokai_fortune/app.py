@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import hashlib
 from datetime import date
+from pathlib import Path
 
 from flask import Flask, render_template, request
 
 
-app = Flask(__name__)
+ROOT = Path(__file__).resolve().parent
+app = Flask(__name__, template_folder=str(ROOT / "templates"), static_folder=str(ROOT / "static"))
 
 YOKAI = [
     ("河童", "流れを読むもの", "急がず、今日ひとつだけ水面を変えよ。"),
