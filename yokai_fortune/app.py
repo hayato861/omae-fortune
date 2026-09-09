@@ -29,13 +29,28 @@ YOKAI_IMAGES = {
     "ぬらりひょん": "yokai-nurarihyon.png", "座敷童子": "yokai-zashikiwarashi.png", "ぬりかべ": "yokai-nurikabe.png", "猫又": "yokai-nekomata.png",
     "一反木綿": "yokai-ittanmomen.png", "鬼火": "yokai-onibi.png", "狐": "yokai-kitsune.png", "目目連": "yokai-mokumokuren.png",
 }
+YOKAI_DETAILS = {
+    "河童": ("流れが変わる前兆", "人との約束やお金の流れを整える夜", "返事と支払いを一つだけ片づける", "勢いだけで新しい約束を増やす"),
+    "天狗": ("高い視点と孤独", "正しさが先に立ち、周りの声が遠くなる夜", "反対意見を一人だけ聞く", "勝ち負けで人を測る"),
+    "鎌鼬": ("速さと切れ味", "短い決断が停滞を切り裂く夜", "五分で終わる一手から始める", "急いで大事な返事を送る"),
+    "雪女": ("静けさと距離", "無理に近づかず、心を冷ます時間が必要な夜", "通知を切って一人の時間を持つ", "寂しさだけで連絡する"),
+    "ぬらりひょん": ("境界を越える知恵", "他人の役目を背負わされやすい夜", "自分の担当を一文で決める", "頼まれていない世話まで焼く"),
+    "座敷童子": ("小さな福と習慣", "暮らしを整えた場所に運が居つく夜", "机か財布を一か所だけ整える", "大きな幸運を待って動かない"),
+    "ぬりかべ": ("守りと境界線", "進めないことが、今は守りになる夜", "やらないことを一つ決める", "壁を理由に全てを諦める"),
+    "猫又": ("記憶と執着", "昔の出来事が今の判断に混ざる夜", "過去と今を紙に分けて書く", "昔の相手を今の人に重ねる"),
+    "一反木綿": ("風と身軽さ", "一人で抱えるほど、動きが鈍くなる夜", "誰かに一つだけ頼る", "全部を自力で片づける"),
+    "鬼火": ("違和感と導き", "小さな引っかかりが道を照らす夜", "気になったことを一行だけ記録する", "不安を無視して突き進む"),
+    "狐": ("変化と本音", "場に合わせる顔が増えすぎる夜", "本当の希望を一つ口にする", "好かれるために約束を増やす"),
+    "目目連": ("観察と見落とし", "見えていない事実が答えを隠す夜", "事実と想像を別々に書く", "推測だけで誰かを裁く"),
+}
 
 
 def yokai_reading(name: str, birthday: str) -> dict[str, str]:
     digest = hashlib.sha256(f"yokai:{name.strip()}:{birthday}:{date.today().isoformat()}".encode()).digest()
     creature, title, advice = YOKAI[digest[0] % len(YOKAI)]
     omen = (digest[1] % 5) + 1
-    return {"creature": creature, "title": title, "advice": advice, "omen": str(omen), "image": YOKAI_IMAGES[creature]}
+    nature, sign, move, avoid = YOKAI_DETAILS[creature]
+    return {"creature": creature, "title": title, "advice": advice, "omen": str(omen), "image": YOKAI_IMAGES[creature], "nature": nature, "sign": sign, "move": move, "avoid": avoid}
 
 
 @app.route("/", methods=["GET", "POST"])
