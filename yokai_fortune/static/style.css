@@ -26,10 +26,11 @@ h2{font-size:clamp(48px,9vw,82px);margin:10px 0;color:var(--gold);font-weight:50
 .result-visual{display:grid;grid-template-columns:minmax(0,560px) minmax(150px,1fr);gap:42px;align-items:center;margin-top:28px}
 .yokai-result-image{display:block;width:100%;max-height:650px;object-fit:cover;object-position:center;border:1px solid #3a3d49;box-shadow:0 18px 55px rgba(0,0,0,.45)}
 .result-identity h1{font-size:clamp(64px,9vw,125px);color:var(--gold);margin:0;white-space:nowrap;writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.08em}
-.result-identity .title{margin:28px 0 0;writing-mode:vertical-rl;line-height:1.8}
+.result-identity{display:flex;align-items:center;gap:28px;min-height:100%}
+.result-identity .title{margin:28px 0 0;writing-mode:horizontal-tb;line-height:1.8;max-width:220px}
 .result-page h1{font-size:clamp(52px,13vw,130px);color:var(--gold);margin:35px 0 8px;white-space:nowrap}
 .result-page .title{font-size:20px}
 .result-page blockquote{max-width:620px;font-size:clamp(22px,4vw,34px);margin-top:65px}
 .omen{color:#aaa9a7}
 .back{display:inline-block;margin-top:55px;color:var(--gold);text-underline-offset:6px}
-@media(max-width:700px){main{padding-top:8vh}.birthday-fields{gap:4px}.birthday-fields span{font-size:13px}.result-visual{display:block}.yokai-result-image{max-height:520px}.result-identity h1{font-size:clamp(52px,16vw,88px);writing-mode:horizontal-tb;margin:28px 0 8px}.result-identity .title{writing-mode:horizontal-tb;margin:0}}
+@media(max-width:700px){main{padding-top:8vh}.birthday-fields{gap:4px}.birthday-fields span{font-size:13px}.result-visual{display:block}.yokai-result-image{max-height:520px}.result-identity{display:block}.result-identity h1{font-size:clamp(52px,16vw,88px);writing-mode:horizontal-tb;margin:28px 0 8px}.result-identity .title{writing-mode:horizontal-tb;margin:0}}
