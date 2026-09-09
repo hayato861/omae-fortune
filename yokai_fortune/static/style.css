@@ -22,11 +22,14 @@ h2{font-size:clamp(48px,9vw,82px);margin:10px 0;color:var(--gold);font-weight:50
 .title{color:#aaa9a7}
 .result blockquote{margin:35px 0;padding-left:20px;border-left:1px solid #c2574e;font-size:22px;line-height:1.8}
 .result>p:last-child{color:#aaa9a7;font-size:14px}
-.result-page{max-width:760px}
-.yokai-result-image{display:block;width:min(100%,460px);max-height:520px;object-fit:cover;object-position:center;margin:28px 0 34px;border:1px solid #3a3d49;box-shadow:0 18px 55px rgba(0,0,0,.45)}
+.result-page{max-width:980px}
+.result-visual{display:grid;grid-template-columns:minmax(0,560px) minmax(150px,1fr);gap:42px;align-items:center;margin-top:28px}
+.yokai-result-image{display:block;width:100%;max-height:650px;object-fit:cover;object-position:center;border:1px solid #3a3d49;box-shadow:0 18px 55px rgba(0,0,0,.45)}
+.result-identity h1{font-size:clamp(64px,9vw,125px);color:var(--gold);margin:0;white-space:nowrap;writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.08em}
+.result-identity .title{margin:28px 0 0;writing-mode:vertical-rl;line-height:1.8}
 .result-page h1{font-size:clamp(52px,13vw,130px);color:var(--gold);margin:35px 0 8px;white-space:nowrap}
 .result-page .title{font-size:20px}
 .result-page blockquote{max-width:620px;font-size:clamp(22px,4vw,34px);margin-top:65px}
 .omen{color:#aaa9a7}
 .back{display:inline-block;margin-top:55px;color:var(--gold);text-underline-offset:6px}
-@media(max-width:520px){main{padding-top:8vh}.birthday-fields{gap:4px}.birthday-fields span{font-size:13px}}
+@media(max-width:700px){main{padding-top:8vh}.birthday-fields{gap:4px}.birthday-fields span{font-size:13px}.result-visual{display:block}.yokai-result-image{max-height:520px}.result-identity h1{font-size:clamp(52px,16vw,88px);writing-mode:horizontal-tb;margin:28px 0 8px}.result-identity .title{writing-mode:horizontal-tb;margin:0}}
