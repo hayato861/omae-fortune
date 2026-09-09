@@ -8,6 +8,7 @@
 <body>
   <main class="result-page">
     <p class="eyebrow">今夜、てめえの後ろにいるもの</p>
+    <img class="yokai-result-image" src="{{ url_for('static', filename=reading.image) }}" alt="{{ reading.creature }}の姿" width="1122" height="1402">
     <h1>{{ reading.creature }}</h1>
     <p class="title">{{ reading.title }}</p>
     <blockquote>「{{ reading.advice }}」</blockquote>

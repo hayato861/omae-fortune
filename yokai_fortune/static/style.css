@@ -23,7 +23,8 @@ h2{font-size:clamp(48px,9vw,82px);margin:10px 0;color:var(--gold);font-weight:50
 .result blockquote{margin:35px 0;padding-left:20px;border-left:1px solid #c2574e;font-size:22px;line-height:1.8}
 .result>p:last-child{color:#aaa9a7;font-size:14px}
 .result-page{max-width:760px}
-.result-page h1{font-size:clamp(64px,13vw,130px);color:var(--gold);margin:35px 0 8px}
+.yokai-result-image{display:block;width:min(100%,460px);max-height:520px;object-fit:cover;object-position:center;margin:28px 0 34px;border:1px solid #3a3d49;box-shadow:0 18px 55px rgba(0,0,0,.45)}
+.result-page h1{font-size:clamp(52px,13vw,130px);color:var(--gold);margin:35px 0 8px;white-space:nowrap}
 .result-page .title{font-size:20px}
 .result-page blockquote{max-width:620px;font-size:clamp(22px,4vw,34px);margin-top:65px}
 .omen{color:#aaa9a7}

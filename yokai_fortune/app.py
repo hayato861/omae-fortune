@@ -24,13 +24,18 @@ YOKAI = [
     ("狐", "姿を変えるもの", "好かれる顔を増やすほど、本当の声を失う。"),
     ("目目連", "見えないものを見るもの", "答えを探す前に、見落としている事実を書き出せ。"),
 ]
+YOKAI_IMAGES = {
+    "河童": "yokai-kappa.png", "天狗": "yokai-tengu.png", "鎌鼬": "yokai-kamaitachi.png", "雪女": "yokai-yukionna.png",
+    "ぬらりひょん": "yokai-nurarihyon.png", "座敷童子": "yokai-zashikiwarashi.png", "ぬりかべ": "yokai-nurikabe.png", "猫又": "yokai-nekomata.png",
+    "一反木綿": "yokai-ittanmomen.png", "鬼火": "yokai-onibi.png", "狐": "yokai-kitsune.png", "目目連": "yokai-mokumokuren.png",
+}
 
 
 def yokai_reading(name: str, birthday: str) -> dict[str, str]:
     digest = hashlib.sha256(f"yokai:{name.strip()}:{birthday}:{date.today().isoformat()}".encode()).digest()
     creature, title, advice = YOKAI[digest[0] % len(YOKAI)]
     omen = (digest[1] % 5) + 1
-    return {"creature": creature, "title": title, "advice": advice, "omen": str(omen)}
+    return {"creature": creature, "title": title, "advice": advice, "omen": str(omen), "image": YOKAI_IMAGES[creature]}
 
 
 @app.route("/", methods=["GET", "POST"])
