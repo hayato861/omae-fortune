@@ -27,7 +27,7 @@ h2{font-size:clamp(48px,9vw,82px);margin:10px 0;color:var(--gold);font-weight:50
 .yokai-result-image{display:block;width:100%;max-height:560px;object-fit:cover;object-position:center;border:1px solid #3a3d49;box-shadow:0 18px 55px rgba(0,0,0,.45)}
 .result-identity h1{font-size:clamp(64px,9vw,125px);color:var(--gold);margin:0;white-space:nowrap;writing-mode:vertical-rl;text-orientation:mixed;letter-spacing:.08em}
 .result-identity{display:flex;align-items:center;gap:28px;min-height:100%}
-.result-identity .title{margin:28px 0 0;writing-mode:horizontal-tb;line-height:1.8;max-width:220px}
+.result-identity .title{margin:28px 0 0;writing-mode:horizontal-tb!important;text-orientation:mixed;line-height:1.8;max-width:240px;white-space:normal}
 .result-page h1{font-size:clamp(52px,13vw,130px);color:var(--gold);margin:35px 0 8px;white-space:nowrap}
 .result-page .title{font-size:20px}
 .result-page blockquote{max-width:620px;font-size:clamp(22px,4vw,34px);margin-top:65px}
