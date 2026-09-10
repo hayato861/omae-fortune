@@ -53,7 +53,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
 .birthday-group{margin:0 0 24px}.birthday-group>p{margin:0 0 10px;font-weight:700}.birthday-fields{display:grid;grid-template-columns:minmax(90px,1.7fr) auto minmax(56px,1fr) auto minmax(56px,1fr) auto;align-items:end;gap:8px}.birthday-fields label{margin:0}.birthday-fields label span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.birthday-fields input{margin:0;text-align:center}.birthday-fields i{padding-bottom:13px;font-style:normal;font-weight:700;color:#aaa}
 @media(max-width:400px){.birthday-fields{gap:5px}.birthday-fields input{font-size:15px}}
 
-.daily-hook{margin:22px 0 0;padding:12px 16px;border-left:3px solid var(--gold);background:rgba(211,166,44,.09);font-family:"Shippori Mincho",serif;font-weight:700;line-height:1.7}
+.daily-hook{margin:22px 0 0;padding:12px 16px;border-left:3px solid var(--gold);background:rgba(211,166,44,.09);font-family:"Shippori Mincho",serif;font-weight:700;line-height:1.7}.contact-link a{color:inherit;text-underline-offset:4px}
 .visit-streak{margin:8px 0 0;color:var(--muted);font-size:12px;letter-spacing:.04em}
 
 /* 有料版: 12守護鬼 × 五相 */
