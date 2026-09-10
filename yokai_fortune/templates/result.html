@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ name }}の百鬼夜行｜名もなきものの占い</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='3') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='4') }}">
 </head>
 <body>
   <main class="result-page">
     <p class="eyebrow">今夜、てめえの後ろにいるもの</p>
     <div class="result-visual">
       <img class="yokai-result-image" src="{{ url_for('static', filename=reading.image) }}" alt="{{ reading.creature }}の姿" width="1122" height="1402">
-      <div class="result-identity"><h1>{{ reading.creature }}</h1><p class="title">{{ reading.title }}</p></div>
+      <div class="result-identity"><h1>{{ reading.creature }}</h1><p class="result-subtitle" style="writing-mode:horizontal-tb!important;text-orientation:mixed;white-space:normal;">{{ reading.title }}</p></div>
     </div>
     <blockquote>「{{ reading.advice }}」</blockquote>
     <p class="omen">今夜の兆し：{{ reading.omen }}つ。明日になれば、別のものが見える。</p>
