@@ -17,6 +17,11 @@ app = Flask(__name__)
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 3600
 analytics_logger = logging.getLogger("fortune.analytics")
 analytics_logger.setLevel(logging.INFO)
+if not analytics_logger.handlers:
+    analytics_handler = logging.StreamHandler()
+    analytics_handler.setFormatter(logging.Formatter("%(message)s"))
+    analytics_logger.addHandler(analytics_handler)
+analytics_logger.propagate = False
 ALLOWED_EVENTS = {"fortune_started", "share_started", "share_completed", "premium_clicked", "fortune_helpful", "fortune_missed"}
 FULL_WIDTH_DIGITS = str.maketrans("０１２３４５６７８９", "0123456789")
 STRIPE_PLANS = {
@@ -275,14 +280,15 @@ def healthz():
 
 @app.post("/events")
 def track_event():
-    payload = request.get_json(silent=True) or {}
-    if not payload and request.get_data():
-        try:
-            payload = json.loads(request.get_data())
-        except (TypeError, ValueError, json.JSONDecodeError):
-            payload = {}
+    # sendBeacon uses text/plain to avoid a cross-origin preflight on Pages.
+    try:
+        payload = json.loads(request.get_data())
+    except (ValueError, UnicodeDecodeError):
+        return {"error": "invalid event"}, 400
+    if not isinstance(payload, dict):
+        return {"error": "invalid event"}, 400
     event = payload.get("event")
-    if event not in ALLOWED_EVENTS:
+    if not isinstance(event, str) or event not in ALLOWED_EVENTS:
         return {"error": "invalid event"}, 400
     analytics_logger.info(json.dumps({"event": event}, ensure_ascii=False))
     return "", 204

@@ -1,5 +1,10 @@
 from datetime import date
 from pathlib import Path
+import json
+import subprocess
+import sys
+
+import pytest
 
 from app import LIFE_PATHS, ONI_ASPECTS, app, daily_fortune, decrypt_reading_data, encrypt_reading_data, life_path_number, normalize_digits, personal_day_number, premium_oni_type, premium_report
 from analytics_report import parse_json_stream, summarize
@@ -57,6 +62,31 @@ def test_analytics_accepts_only_known_anonymous_events():
     assert client.post("/events", json={"event": "unknown"}).status_code == 400
     assert client.post("/events", json={"event": "fortune_helpful"}).status_code == 204
     assert client.post("/events", data='{"event":"fortune_started"}', content_type="text/plain").status_code == 204
+
+
+@pytest.mark.parametrize("body", [b"", b"broken", b"null", b"[]", b"true", b'"event"', b'{"event":[]}', b'{"event":{}}', b'\xff'])
+def test_analytics_rejects_invalid_payload_without_server_error(body):
+    response = app.test_client().post("/events", data=body, content_type="text/plain;charset=UTF-8")
+    assert response.status_code == 400
+    assert response.json == {"error": "invalid event"}
+
+
+def test_browser_beacon_emits_one_anonymous_log_without_root_logging():
+    # A fresh process reproduces Gunicorn without pytest's logging handlers.
+    result = subprocess.run(
+        [sys.executable, "-c", """
+from app import app
+response = app.test_client().post(
+    '/events', data='{"event":"fortune_started","name":"PRIVATE_NAME","birthday":"1990-01-01"}',
+    content_type='text/plain;charset=UTF-8',
+    headers={'Origin': 'https://hayato861.github.io'},
+)
+assert response.status_code == 204
+"""],
+        cwd=Path(__file__).resolve().parents[1], capture_output=True, text=True, check=True,
+    )
+    assert [json.loads(line) for line in result.stderr.splitlines()] == [{"event": "fortune_started"}]
+    assert result.stdout == ""
 
 
 def test_static_landing_warms_backend_and_posts_to_render():
