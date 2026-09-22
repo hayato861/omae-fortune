@@ -23,6 +23,7 @@ if not analytics_logger.handlers:
     analytics_logger.addHandler(analytics_handler)
 analytics_logger.propagate = False
 ALLOWED_EVENTS = {"fortune_started", "share_started", "share_completed", "premium_clicked", "fortune_helpful", "fortune_missed"}
+ALLOWED_EVENTS.update({"page_view", "landing_view", "pages_fortune_completed"})
 FULL_WIDTH_DIGITS = str.maketrans("０１２３４５６７８９", "0123456789")
 STRIPE_PLANS = {
     "single": {"mode": "payment", "price_env": "STRIPE_SINGLE_PRICE_ID"},

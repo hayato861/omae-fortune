@@ -239,3 +239,42 @@ def test_paid_form_explains_encrypted_storage_in_oni_voice():
 
 def test_webhook_rejects_requests_when_unconfigured():
     assert app.test_client().post("/stripe/webhook", data=b"{}").status_code == 503
+
+
+@pytest.mark.parametrize('event', ['page_view', 'landing_view', 'pages_fortune_completed'])
+def test_pages_measurement_events_are_accepted(event):
+    response = app.test_client().post('/events', data=json.dumps({'event': event}), content_type='text/plain')
+    assert response.status_code == 204
+
+
+def test_summary_combines_readings_without_double_counting_requests():
+    records = [{'message': json.dumps({'event': event})} for event in [
+        'page_view', 'page_view', 'landing_view', 'fortune_completed', 'pages_fortune_completed',
+    ]]
+    records.extend([
+        {'message': '"GET / HTTP/1.1" 200'},
+        {'message': '"POST /fortune HTTP/1.1" 200'},
+        {'message': '"POST /events HTTP/1.1" 204'},
+    ])
+    counts = summarize(records)
+    assert counts['page_views'] == 2
+    assert counts['landing_view'] == 1
+    assert counts['fortune_completed'] == 2
+    assert counts['pages_fortune_completed'] == 1
+
+
+def test_event_log_pagination_deduplicates_boundary(monkeypatch):
+    from analytics_report import fetch_event_logs
+    from types import SimpleNamespace
+    first = [{'id': str(i), 'timestamp': f'2026-09-22T12:00:00.{i:09d}Z', 'message': '{"event":"page_view"}'} for i in range(1000)]
+    second = [first[0], {'id': 'older', 'timestamp': '2026-09-22T11:59:59.000000000Z', 'message': '{"event":"page_view"}'}]
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command)
+        batch = first if len(calls) == 1 else second
+        return SimpleNamespace(stdout='\n'.join(json.dumps(row) for row in batch))
+    monkeypatch.setattr('analytics_report.subprocess.run', run)
+    records = fetch_event_logs('service', '2026-09-22T00:00:00Z', '2026-09-23T00:00:00Z')
+    assert len(records) == 1001
+    assert calls[1][calls[1].index('--end') + 1] == first[0]['timestamp']
+    assert summarize(records)['page_views'] == 1001

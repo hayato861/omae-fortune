@@ -32,7 +32,7 @@ def build() -> Path:
     # JavaScript対応ブラウザでは無料鑑定をPages内で完結させる。JSが無効なら
     # 従来どおりRenderへのPOSTがフォールバックになる。
     html = html.replace('data-fortune-form>', 'data-fortune-form data-static-fortune>')
-    html = html.replace('</body>', '<script src="static/static-fortune.js"></script></body>')
+    html = html.replace('</body>', '<script src="static/static-fortune.js?v=20260923"></script></body>')
 
     shutil.rmtree(OUTPUT, ignore_errors=True)
     OUTPUT.mkdir()
@@ -46,7 +46,7 @@ def build() -> Path:
     result_html = result_html.replace('href="/"', 'href="./"')
     result_html = result_html.replace('<body class="has-mobile-cta">', f'<body class="has-mobile-cta" data-backend-origin="{BACKEND_ORIGIN}" data-public-origin="{PAGES_ORIGIN}" data-static-result>')
     data = json.dumps({"fortunes": FORTUNES, "days": DAY_DETAILS, "oni": LIFE_PATHS, "aspects": ONI_ASPECTS}, ensure_ascii=False, separators=(",", ":"))
-    result_html = result_html.replace('</body>', f'<script>window.FORTUNE_DATA={data};</script><script src="static/static-fortune.js"></script></body>')
+    result_html = result_html.replace('</body>', f'<script>window.FORTUNE_DATA={data};</script><script src="static/static-fortune.js?v=20260923"></script></body>')
     (OUTPUT / "result.html").write_text(result_html, encoding="utf-8")
     (OUTPUT / ".nojekyll").touch()
     shutil.copytree(ROOT / "static", OUTPUT / "static")

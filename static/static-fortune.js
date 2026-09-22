@@ -85,4 +85,5 @@
   set(".lock-overlay h2", `12守護鬼 × 5つの相 = 全60鬼\nてめえは「${oni.name}・${aspect.name}」`);
   const profile = document.querySelector(".oni-profile");
   Object.assign(profile.dataset, { shareOni: oni.name, shareRole: oni.role, shareScore: score, shareWeapon: oni.weapon, shareWeakness: oni.weakness, shareHell: oni.hell });
+  document.body.dataset.readingReady = "true";
 })();

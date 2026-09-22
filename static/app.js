@@ -36,12 +36,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const track = (event) => {
     const body = JSON.stringify({ event });
-    if (navigator.sendBeacon) {
-      navigator.sendBeacon(`${backendOrigin}/events`, new Blob([body], { type: "text/plain" }));
-    } else {
-      fetch(`${backendOrigin}/events`, { method: "POST", headers: { "Content-Type": "text/plain" }, body, keepalive: true, mode: "no-cors" }).catch(() => {});
-    }
+    try {
+      if (navigator.sendBeacon?.(`${backendOrigin}/events`, new Blob([body], { type: "text/plain" }))) return;
+    } catch (_) {}
+    fetch(`${backendOrigin}/events`, { method: "POST", headers: { "Content-Type": "text/plain" }, body, keepalive: true, mode: "no-cors" }).catch(() => {});
   };
+
+  // A static result template is not a completed reading until it is populated.
+  if (!document.body.hasAttribute("data-static-result") || document.body.dataset.readingReady === "true") {
+    track("page_view");
+  }
+  if (document.querySelector("[data-fortune-form]")) track("landing_view");
+  if (document.body.dataset.readingReady === "true") track("pages_fortune_completed");
 
   document.querySelectorAll("[data-track]").forEach((link) => {
     link.addEventListener("click", () => track(link.dataset.track));

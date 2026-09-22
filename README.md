@@ -29,7 +29,9 @@ flask --app app run --debug
 
 ## 初期反応の計測
 
-個人情報やCookieを使わず、`fortune_started`、`fortune_completed`、`share_started`、`share_completed`、`premium_clicked` のイベント名だけをRenderログへ出力します。結果画面の共有ボタンは、氏名と生年月日を含まない鬼印PNGをブラウザー内で生成します。
+個人情報やCookieを送信せず、イベント名だけをRenderログへ出力します。`page_view` は各ページの表示回数（PV）、`landing_view` は鑑定入口の表示回数です。人数ではなく、再読み込みも1回として数えます。`pages_fortune_completed` はGitHub Pages内で鑑定結果の生成・表示に成功した回数で、結果ページへの直接アクセスや入力のない再読み込みは含みません。サーバー側の `fortune_completed` と合わせて鑑定完了数を集計します。
+
+鑑定開始・共有・極み版クリックも記録します。氏名・生年月日・URL・識別IDは計測データに含めません。結果画面の共有ボタンは、氏名と生年月日を含まない鬼印PNGをブラウザー内で生成します。
 
 直近24時間の反応は次のコマンドで集計できます。Render CLIへのログインが必要です。
 
@@ -38,6 +40,9 @@ python analytics_report.py
 ```
 
 期間を変える場合は `python analytics_report.py --hours 168` のように指定します。
+稼働確認ログを除外して取得し、1,000件を超える場合も続きのログを取得します。鑑定完了率の分母は鑑定入口表示回数です。計測開始前、Renderの保存期限外、ブラウザーによる送信失敗・遮断分は含まれません。
+
+計測のテストは `python -m pytest -q` と、静的ページ生成後の `node --test tests/test_tracking.cjs` で実行できます。
 
 ## 有料化について
 

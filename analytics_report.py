@@ -10,7 +10,6 @@ from datetime import datetime, timedelta, timezone
 
 DEFAULT_SERVICE_ID = "srv-dadnjngu01pc73bj9tag"
 REQUEST_PATTERN = re.compile(r'"(GET|POST) ([^ ?"]+)(?:\?[^ "]*)? HTTP/[^"]+" (\d{3})')
-EVENT_PATTERN = re.compile(r'"event"\s*:\s*"([a-z_]+)"')
 
 
 def parse_json_stream(raw: str) -> list[dict]:
@@ -31,9 +30,12 @@ def summarize(records: list[dict]) -> dict[str, int]:
     counts: Counter[str] = Counter()
     for record in records:
         message = record.get("message", "")
-        event = EVENT_PATTERN.search(message)
-        if event:
-            counts[event.group(1)] += 1
+        try:
+            payload = json.loads(message)
+        except (ValueError, TypeError):
+            payload = None
+        if isinstance(payload, dict) and isinstance(payload.get("event"), str):
+            counts[payload["event"]] += 1
 
         request = REQUEST_PATTERN.search(message)
         if not request:
@@ -41,12 +43,41 @@ def summarize(records: list[dict]) -> dict[str, int]:
         method, path, status = request.groups()
         if status.startswith(("2", "3")):
             if method == "GET" and path == "/":
-                counts["page_views"] += 1
+                counts["server_top_requests"] += 1
             elif method == "POST" and path == "/fortune":
                 counts["fortune_requests"] += 1
             elif method == "GET" and path == "/premium":
                 counts["premium_views"] += 1
+    if "page_view" in counts:
+        counts["page_views"] = counts.pop("page_view")
+    elif "server_top_requests" in counts:
+        counts["page_views"] = counts["server_top_requests"]
+    counts.pop("server_top_requests", None)
+    if "pages_fortune_completed" in counts:
+        counts["fortune_completed"] += counts["pages_fortune_completed"]
     return dict(counts)
+
+
+def fetch_event_logs(service: str, start: str, end: str) -> list[dict]:
+    """Exclude health checks and page backward without truncating at 1,000 logs."""
+    records = {}
+    while True:
+        command = [
+            "render", "logs", "--resources", service, "--start", start, "--end", end,
+            "--text", "event", "--direction", "backward", "--limit", "1000", "--output", "json",
+        ]
+        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        batch = parse_json_stream(result.stdout)
+        previous_size = len(records)
+        for record in batch:
+            records[record["id"]] = record
+        if len(batch) < 1000:
+            return list(records.values())
+        oldest = min(record["timestamp"] for record in batch)
+        if oldest == end or len(records) == previous_size:
+            raise RuntimeError("ログが同一時刻に集中しています。期間を短くして再集計してください。")
+        # Keep Render's nanosecond precision; inclusive boundary IDs are deduplicated.
+        end = oldest
 
 
 def main() -> None:
@@ -55,33 +86,28 @@ def main() -> None:
     parser.add_argument("--service", default=DEFAULT_SERVICE_ID, help="Render service ID")
     args = parser.parse_args()
 
-    start = datetime.now(timezone.utc) - timedelta(hours=max(1, args.hours))
-    command = [
-        "render", "logs", "--resources", args.service,
-        "--start", start.isoformat().replace("+00:00", "Z"),
-        "--limit", "1000", "--output", "json",
-    ]
-    result = subprocess.run(command, check=True, capture_output=True, text=True)
-    counts = summarize(parse_json_stream(result.stdout))
-    if not counts.get("fortune_completed"):
-        counts["fortune_completed"] = counts.get("fortune_requests", 0)
+    end = datetime.now(timezone.utc)
+    start = end - timedelta(hours=max(1, args.hours))
+    counts = summarize(fetch_event_logs(args.service, start.isoformat().replace("+00:00", "Z"), end.isoformat().replace("+00:00", "Z")))
 
     labels = (
-        ("page_views", "トップ表示"),
+        ("page_views", "サイト閲覧（PV）"),
+        ("landing_view", "鑑定入口表示"),
         ("fortune_started", "鑑定開始"),
         ("fortune_completed", "鑑定完了"),
+        ("pages_fortune_completed", "うちPages内完了"),
         ("share_started", "共有操作"),
         ("share_completed", "共有完了"),
         ("fortune_helpful", "刺さった"),
         ("fortune_missed", "見当違い"),
         ("premium_clicked", "極み版クリック"),
-        ("premium_views", "極み版表示"),
     )
     print(f"直近 {args.hours} 時間")
     for key, label in labels:
         print(f"{label:<12} {counts.get(key, 0):>6}")
+    print("※取得できたログ内のイベント回数です。人数ではありません。計測開始前・保存期限外・送信失敗分は含みません。")
 
-    views = counts.get("page_views", 0)
+    views = counts.get("landing_view", 0)
     completed = counts.get("fortune_completed", 0)
     shared = counts.get("share_completed", 0)
     if views:
