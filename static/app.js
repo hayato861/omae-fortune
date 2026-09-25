@@ -196,7 +196,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const blob = await makeCard(profile);
       const file = new File([blob], "oni-jirushi.png", { type: "image/png" });
       if (navigator.share && navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ title: "名もなき鬼の鬼印診断", text, url: shareUrl, files: [file] });
+        // X's share target drops `text` when `url` is supplied separately.
+        // The URL is already part of the prepared text, so keep one text field
+        // to preserve the complete template alongside the image.
+        await navigator.share({ title: "名もなき鬼の鬼印診断", text, files: [file] });
         status.textContent = "知らせてやったぜ。";
         track("share_completed");
       } else {

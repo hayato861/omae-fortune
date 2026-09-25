@@ -198,7 +198,8 @@ def test_share_message_includes_site_url():
     script = app.test_client().get("/static/app.js").text
     assert "const shareUrl" in script
     assert "${shareUrl}\\n#鬼印診断" in script
-    assert "url: shareUrl" in script
+    assert 'navigator.share({ title: "名もなき鬼の鬼印診断", text, files: [file] })' in script
+    assert "url: shareUrl" not in script
 
 
 def test_premium_page_promises_sixty_oni():
