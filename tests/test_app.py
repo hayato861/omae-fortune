@@ -115,6 +115,12 @@ def test_fortune_is_stable_for_same_inputs():
     assert daily_fortune("健太", "1990-01-01") == daily_fortune("健太", "1990-01-01")
 
 
+def test_daily_fortunes_have_twenty_seven_distinct_entries():
+    from app import FORTUNES
+    assert len(FORTUNES) == 27
+    assert len({fortune["headline"] for fortune in FORTUNES}) == 27
+
+
 def test_personal_day_drives_daily_reading():
     target = date(2026, 9, 6)
     result = daily_fortune("健太", "1990-01-01", target)

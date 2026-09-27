@@ -50,7 +50,8 @@
   let lifeNumber = digits.reduce((sum, digit) => sum + digit, 0);
   while (![11, 22, 33].includes(lifeNumber) && lifeNumber > 9) lifeNumber = [...String(lifeNumber)].reduce((sum, digit) => sum + Number(digit), 0);
   const oni = data.oni[String(lifeNumber)];
-  const base = data.fortunes[dayNumber - 1];
+  const variant = hash(`${todayIso}:${name}:${birthday}:fortune-variant`) % 3;
+  const base = data.fortunes[(dayNumber - 1) * 3 + variant];
   const day = data.days[String(dayNumber)];
   const seed = hash(`${todayIso}:${name}:${birthday}`);
   const score = Math.max(40, Math.min(98, base.score + (seed % 9) - 4));
@@ -96,7 +97,8 @@
     const target = new Date(`${todayIso}T00:00:00`);
     target.setDate(target.getDate() + index);
     const targetNumber = personalDay(target);
-    const targetFortune = data.fortunes[targetNumber - 1];
+    const targetVariant = hash(`${target.getFullYear()}-${String(target.getMonth() + 1).padStart(2, "0")}-${String(target.getDate()).padStart(2, "0")}:${name}:${birthday}:fortune-variant`) % 3;
+    const targetFortune = data.fortunes[(targetNumber - 1) * 3 + targetVariant];
     const targetDay = data.days[String(targetNumber)];
     const values = card.querySelectorAll("span, b, p");
     if (values[0]) values[0].textContent = `${String(target.getMonth() + 1).padStart(2, "0")}/${String(target.getDate()).padStart(2, "0")}`;
