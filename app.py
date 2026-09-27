@@ -56,6 +56,14 @@ HEXAGRAM_GUIDANCE = (
     ("火がついてやがる。だが燃え尽きるまで走るのは馬鹿のやることだ。", "熱いうちに一つ完成させろ", "勢いで約束を増やすこと"),
     ("終わりは負けじゃねえ。畳むからこそ、次の勝負へ行ける。", "今日終わらせる一件を決めろ", "古い話を何度も裁き直すこと"),
 )
+HEXAGRAM_STAGES = (
+    ("初爻・仕込み", "まだ土台だ。おい小便小僧、でけえ話は後にして足元を固めな。"),
+    ("二爻・伸び始め", "芽は出てやがる。べらんめえ、ここで人の手を借りりゃ伸びるぞ。"),
+    ("三爻・転換前", "調子に乗ると転ぶ場所だ。勢いは残して、手順だけは守りやがれ。"),
+    ("四爻・外へ出る", "内輪の準備は終いだ。てめえの仕事を表へ出して、反応を受けな。"),
+    ("五爻・要所", "ここが勝負どころだ。欲張らず、一番大事な一手に腹を決めろ。"),
+    ("上爻・締めくくり", "頂上で浮かれるな。終わらせ方まで決めた奴が、次の道を取る。"),
+)
 
 
 def normalize_digits(value: str) -> str:
@@ -250,8 +258,10 @@ def hexagram_reading(name: str, birthday: str, concern: str, target_date: date |
     target_date = target_date or date.today()
     seed = hashlib.sha256(f"hex:{target_date.isoformat()}:{name.strip()}:{birthday}:{concern}".encode("utf-8")).digest()
     index = int.from_bytes(seed[:4], "big") % len(HEXAGRAM_NAMES)
+    line_index = seed[4] % len(HEXAGRAM_STAGES)
     voice, move, avoid = HEXAGRAM_GUIDANCE[index % len(HEXAGRAM_GUIDANCE)]
-    return {"name": HEXAGRAM_NAMES[index], "index": index + 1, "voice": voice, "move": move, "avoid": avoid}
+    line_name, line_voice = HEXAGRAM_STAGES[line_index]
+    return {"name": HEXAGRAM_NAMES[index], "index": index + 1, "line": line_index + 1, "line_name": line_name, "voice": f"{voice} {line_voice}", "move": move, "avoid": avoid}
 
 
 def reduce_number(value: int) -> int:

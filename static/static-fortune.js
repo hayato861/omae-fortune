@@ -67,6 +67,8 @@
   const concernVariant = hash(`${todayIso}:${name}:${birthday}:concern:${concernKey}`) % 3;
   const hexIndex = hash(`${todayIso}:${name}:${birthday}:hex:${concernKey}`) % data.hexagrams.length;
   const hexGuidance = data.hexagram_guidance[hexIndex % data.hexagram_guidance.length];
+  const hexLine = hash(`${todayIso}:${name}:${birthday}:hex-line:${concernKey}`) % data.hexagram_stages.length;
+  const hexStage = data.hexagram_stages[hexLine];
 
   const set = (selector, value) => { const node = document.querySelector(selector); if (node) node.textContent = value; };
   document.title = `${name}の今日の運勢｜お前のためだけの占い`;
@@ -96,8 +98,8 @@
   set(".concern-reading .section-number", `選んだ悩み・${concern.label}`);
   set(".concern-reading h2", concern.moves?.[concernVariant] || concern.move);
   set(".concern-reading p:last-child", `今日の禁じ手：${concern.avoids?.[concernVariant] || concern.avoid}`);
-  set(".hexagram-reading .section-number", `易の一卦・${data.hexagrams[hexIndex]}（${hexIndex + 1}番）`);
-  set(".hexagram-reading h2", hexGuidance[0]);
+  set(".hexagram-reading .section-number", `易の一卦・${data.hexagrams[hexIndex]}（${hexIndex + 1}番）／${hexStage[0]}`);
+  set(".hexagram-reading h2", `${hexGuidance[0]} ${hexStage[1]}`);
   set(".hexagram-reading p:nth-of-type(2)", `卦が授ける一手：${hexGuidance[1]}`);
   set(".hexagram-reading p:nth-of-type(3)", `卦が止めること：${hexGuidance[2]}`);
   document.querySelectorAll(".seven-day-grid article").forEach((card, index) => {

@@ -192,12 +192,15 @@ def test_concern_reading_has_three_deterministic_variants():
 
 
 def test_hexagram_layer_is_deterministic_and_has_sixty_four_signs():
-    from app import HEXAGRAM_NAMES, hexagram_reading
+    from app import HEXAGRAM_NAMES, HEXAGRAM_STAGES, hexagram_reading
     assert len(HEXAGRAM_NAMES) == 64
+    assert len(HEXAGRAM_STAGES) == 6
     first = hexagram_reading("健太", "1990-01-01", "work", date(2026, 9, 6))
     second = hexagram_reading("健太", "1990-01-01", "work", date(2026, 9, 6))
     assert first == second
     assert 1 <= first["index"] <= 64
+    assert 1 <= first["line"] <= 6
+    assert "爻" in first["line_name"]
     assert "おい小便小僧" in first["voice"] or "べらんめえ" in first["voice"]
 
 
