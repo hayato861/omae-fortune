@@ -182,6 +182,15 @@ def test_premium_report_contains_concern_and_seven_days():
     assert result["full_name"].startswith("火遊鬼")
 
 
+def test_concern_reading_has_three_deterministic_variants():
+    from app import CONCERNS
+    assert all(len(item["moves"]) == 3 and len(item["avoids"]) == 3 for item in CONCERNS.values())
+    first = premium_report("健太", "1990-01-01", "work", date(2026, 9, 6))
+    second = premium_report("健太", "1990-01-01", "work", date(2026, 9, 6))
+    assert first["move"] == second["move"]
+    assert first["move"] in CONCERNS["work"]["moves"]
+
+
 def test_paid_reading_data_is_encrypted_and_recoverable(monkeypatch):
     monkeypatch.setenv("PAYMENT_DATA_KEY", "test-key-that-is-longer-than-thirty-two-characters")
     token = encrypt_reading_data("健太", "1990-01-01", "work")

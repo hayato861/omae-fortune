@@ -64,6 +64,7 @@
     return reduce(reduce(year + target.getMonth() + 1) + target.getDate());
   };
   const concern = data.concerns[concernKey] || data.concerns.life;
+  const concernVariant = hash(`${todayIso}:${name}:${birthday}:concern:${concernKey}`) % 3;
 
   const set = (selector, value) => { const node = document.querySelector(selector); if (node) node.textContent = value; };
   document.title = `${name}の今日の運勢｜お前のためだけの占い`;
@@ -91,8 +92,8 @@
   [base.work, base.money, base.love, day.social, day.body, day.best_time, day.caution].forEach((value, index) => { if (details[index]) details[index].textContent = value; });
   set(".lock-overlay h2", `12守護鬼 × 5つの相 = 全60鬼\nてめえは「${oni.name}・${aspect.name}」`);
   set(".concern-reading .section-number", `選んだ悩み・${concern.label}`);
-  set(".concern-reading h2", concern.move);
-  set(".concern-reading p:last-child", `今日の禁じ手：${concern.avoid}`);
+  set(".concern-reading h2", concern.moves?.[concernVariant] || concern.move);
+  set(".concern-reading p:last-child", `今日の禁じ手：${concern.avoids?.[concernVariant] || concern.avoid}`);
   document.querySelectorAll(".seven-day-grid article").forEach((card, index) => {
     const target = new Date(`${todayIso}T00:00:00`);
     target.setDate(target.getDate() + index);

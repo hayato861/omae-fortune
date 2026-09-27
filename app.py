@@ -30,10 +30,10 @@ STRIPE_PLANS = {
     "monthly": {"mode": "subscription", "price_env": "STRIPE_MONTHLY_PRICE_ID"},
 }
 CONCERNS = {
-    "work": {"label": "仕事", "opening": "働き方の癖は、てめえの鬼の武器と弱点がいちばん露骨に出る場所だ。", "move": "成果を一つに絞り、誰が見ても分かる形で残せ", "avoid": "評価を焦って手柄を独り占めすること"},
-    "money": {"label": "銭", "opening": "銭は欲の鏡だ。稼ぎ方より、何に怯えて使うかに性根が出る。", "move": "今月の固定費を一つ見直し、残す金の行き先を先に決めろ", "avoid": "不安を消すためだけの衝動買い"},
-    "love": {"label": "恋", "opening": "惚れた相手の前じゃ、強みと弱みは同じ顔で現れやがる。", "move": "察してもらうのをやめ、望みを短い言葉で一つ伝えろ", "avoid": "返事を勝手に想像して先に傷つくこと"},
-    "life": {"label": "生き方", "opening": "道に迷うのは、道がねえからじゃない。捨てたくねえ道が多すぎるからだ。", "move": "今後三か月で守るものを一つだけ紙に書け", "avoid": "全部を同時に立て直そうとすること"},
+    "work": {"label": "仕事", "opening": "働き方の癖は、てめえの鬼の武器と弱点がいちばん露骨に出る場所だ。", "move": "成果を一つに絞り、誰が見ても分かる形で残せ", "avoid": "評価を焦って手柄を独り占めすること", "moves": ["成果を一つに絞り、誰が見ても分かる形で残せ", "抱えた仕事を一つ見せて、具体的な助言をもらえ", "今週やらねえ仕事を一つ決め、本命に時間を渡せ"], "avoids": ["評価を焦って手柄を独り占めすること", "曖昧なまま引き受け、あとで一人で抱え込むこと", "忙しさを勲章にして、順番を失うこと"]},
+    "money": {"label": "銭", "opening": "銭は欲の鏡だ。稼ぎ方より、何に怯えて使うかに性根が出る。", "move": "今月の固定費を一つ見直し、残す金の行き先を先に決めろ", "avoid": "不安を消すためだけの衝動買い", "moves": ["今月の固定費を一つ見直し、残す金の行き先を先に決めろ", "買う前に三つ比べ、値段より長く使えるかで決めろ", "小さな漏れを一つ止め、その分を先取りで残せ"], "avoids": ["不安を消すためだけの衝動買い", "人に見栄を張るための分不相応な出費", "安さだけを理由に、いらねえ物を増やすこと"]},
+    "love": {"label": "恋", "opening": "惚れた相手の前じゃ、強みと弱みは同じ顔で現れやがる。", "move": "察してもらうのをやめ、望みを短い言葉で一つ伝えろ", "avoid": "返事を勝手に想像して先に傷つくこと", "moves": ["察してもらうのをやめ、望みを短い言葉で一つ伝えろ", "会いたいなら候補日を二つ出して、相手に選ばせろ", "相手の話を最後まで聞き、急いで結論を奪うな"], "avoids": ["返事を勝手に想像して先に傷つくこと", "昔の相手や誰かと比べて、今の縁を測ること", "試すような言い方で、本音を隠すこと"]},
+    "life": {"label": "生き方", "opening": "道に迷うのは、道がねえからじゃない。捨てたくねえ道が多すぎるからだ。", "move": "今後三か月で守るものを一つだけ紙に書け", "avoid": "全部を同時に立て直そうとすること", "moves": ["今後三か月で守るものを一つだけ紙に書け", "明日の自分を楽にする小さな習慣を一つ始めろ", "役目を終えた予定か物を一つ手放し、余白を作れ"], "avoids": ["全部を同時に立て直そうとすること", "人の正解を借りて、自分の本音を後回しにすること", "疲れを無視して、根性だけで押し切ること"]},
 }
 
 
@@ -261,6 +261,7 @@ def daily_fortune(name: str, birthday: str, target_date: date | None = None) -> 
 def premium_report(name: str, birthday: str, concern: str, target_date: date | None = None) -> dict[str, object]:
     target_date = target_date or date.today()
     concern_data = CONCERNS.get(concern, CONCERNS["life"])
+    concern_variant = int(hashlib.sha256(f"concern:{target_date.isoformat()}:{name.strip()}:{birthday}:{concern}".encode("utf-8")).hexdigest()[:8], 16) % 3
     oni = LIFE_PATHS[life_path_number(birthday)]
     complete = premium_oni_type(name, birthday)
     seven_days = []
@@ -284,8 +285,9 @@ def premium_report(name: str, birthday: str, concern: str, target_date: date | N
         "escape": oni["escape"],
         "concern": concern_data,
         "verdict": f"『{complete['gift']}』が、てめえの突破口だ。ただし『{complete['trap']}』へ落ちれば、持ち味がそのまま仇になる。",
-        "move": concern_data["move"],
-        "avoid": concern_data["avoid"],
+        "move": concern_data["moves"][concern_variant],
+        "avoid": concern_data["avoids"][concern_variant],
+        "concern_variant": concern_variant,
         "seven_days": seven_days,
     }
 
