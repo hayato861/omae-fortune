@@ -51,6 +51,12 @@
         <h2>{{ fortune.concern_move }}</h2>
         <p><b>今日の禁じ手：</b>{{ fortune.concern_avoid }}</p>
       </section>
+      <section class="hexagram-reading">
+        <p class="section-number">易の一卦・{{ fortune.hexagram.name }}（{{ fortune.hexagram.index }}番）</p>
+        <h2>{{ fortune.hexagram.voice }}</h2>
+        <p><b>卦が授ける一手：</b>{{ fortune.hexagram.move }}</p>
+        <p><b>卦が止めること：</b>{{ fortune.hexagram.avoid }}</p>
+      </section>
       <section class="seven-days">
         <p class="section-number">これから七日間の流れ</p>
         <div class="seven-day-grid">{% for day in fortune.seven_days %}<article><span>{{ day.date.strftime('%m/%d') }}</span><b>{{ day.score }}点・{{ day.focus }}</b><p>{{ day.action }}</p></article>{% endfor %}</div>

@@ -36,6 +36,27 @@ CONCERNS = {
     "life": {"label": "生き方", "opening": "道に迷うのは、道がねえからじゃない。捨てたくねえ道が多すぎるからだ。", "move": "今後三か月で守るものを一つだけ紙に書け", "avoid": "全部を同時に立て直そうとすること", "moves": ["今後三か月で守るものを一つだけ紙に書け", "明日の自分を楽にする小さな習慣を一つ始めろ", "役目を終えた予定か物を一つ手放し、余白を作れ"], "avoids": ["全部を同時に立て直そうとすること", "人の正解を借りて、自分の本音を後回しにすること", "疲れを無視して、根性だけで押し切ること"]},
 }
 
+HEXAGRAM_NAMES = (
+    "乾為天", "坤為地", "水雷屯", "山水蒙", "水天需", "天水訟", "地水師", "水地比",
+    "風天小畜", "天澤履", "地天泰", "天地否", "天火同人", "火天大有", "地山謙", "雷地豫",
+    "澤雷隨", "山風蠱", "地澤臨", "風地観", "火雷噬嗑", "山火賁", "山地剝", "地雷復",
+    "天雷无妄", "山天大畜", "山雷頤", "澤風大過", "坎為水", "離為火", "澤山咸", "雷風恒",
+    "天山遯", "雷天大壮", "火地晋", "地火明夷", "風火家人", "火澤睽", "水山蹇", "雷水解",
+    "山澤損", "風雷益", "澤天夬", "天風姤", "澤地萃", "地風升", "澤水困", "水風井",
+    "澤火革", "火風鼎", "震為雷", "艮為山", "風山漸", "雷澤帰妹", "雷火豊", "火山旅",
+    "巽為風", "兌為澤", "風水渙", "水澤節", "風澤中孚", "雷山小過", "水火既済", "火水未済",
+)
+HEXAGRAM_GUIDANCE = (
+    ("てめえの前に道はある。まず腹を決めて一歩出ろ。", "最初の一手を今日中に打て", "考えすぎて出発を遅らせること"),
+    ("おい小便小僧、今は育てる時だ。土を耕さず実を急ぐな。", "小さな習慣を一つ続けろ", "結果を急いで根っこを抜くこと"),
+    ("べらんめえ、まだ動くな。潮目を読んだ奴が最後に笑う。", "情報を一つ集めてから決めろ", "焦って大勝負に出ること"),
+    ("人の手を借りろ。ひとりで賢いふりをするのは今日で終いだ。", "信頼できる相手に相談しろ", "黙ったまま察してもらうこと"),
+    ("減らせ。空いた場所がねえと、新しい運は入ってこねえ。", "役目を終えた物か予定を一つ手放せ", "全部を抱えたまま走ること"),
+    ("増やすなら筋を通せ。小さな一手が、あとで大きな流れになる。", "誰かに価値を一つ返せ", "見返りだけを先に数えること"),
+    ("火がついてやがる。だが燃え尽きるまで走るのは馬鹿のやることだ。", "熱いうちに一つ完成させろ", "勢いで約束を増やすこと"),
+    ("終わりは負けじゃねえ。畳むからこそ、次の勝負へ行ける。", "今日終わらせる一件を決めろ", "古い話を何度も裁き直すこと"),
+)
+
 
 def normalize_digits(value: str) -> str:
     return value.translate(FULL_WIDTH_DIGITS)
@@ -225,6 +246,14 @@ def premium_oni_type(name: str, birthday: str) -> dict[str, str]:
     }
 
 
+def hexagram_reading(name: str, birthday: str, concern: str, target_date: date | None = None) -> dict[str, str | int]:
+    target_date = target_date or date.today()
+    seed = hashlib.sha256(f"hex:{target_date.isoformat()}:{name.strip()}:{birthday}:{concern}".encode("utf-8")).digest()
+    index = int.from_bytes(seed[:4], "big") % len(HEXAGRAM_NAMES)
+    voice, move, avoid = HEXAGRAM_GUIDANCE[index % len(HEXAGRAM_GUIDANCE)]
+    return {"name": HEXAGRAM_NAMES[index], "index": index + 1, "voice": voice, "move": move, "avoid": avoid}
+
+
 def reduce_number(value: int) -> int:
     while value > 9:
         value = sum(int(char) for char in str(value))
@@ -262,6 +291,7 @@ def premium_report(name: str, birthday: str, concern: str, target_date: date | N
     target_date = target_date or date.today()
     concern_data = CONCERNS.get(concern, CONCERNS["life"])
     concern_variant = int(hashlib.sha256(f"concern:{target_date.isoformat()}:{name.strip()}:{birthday}:{concern}".encode("utf-8")).hexdigest()[:8], 16) % 3
+    hexagram = hexagram_reading(name, birthday, concern, target_date)
     oni = LIFE_PATHS[life_path_number(birthday)]
     complete = premium_oni_type(name, birthday)
     seven_days = []
@@ -288,6 +318,7 @@ def premium_report(name: str, birthday: str, concern: str, target_date: date | N
         "move": concern_data["moves"][concern_variant],
         "avoid": concern_data["avoids"][concern_variant],
         "concern_variant": concern_variant,
+        "hexagram": hexagram,
         "seven_days": seven_days,
     }
 
@@ -354,6 +385,7 @@ def fortune():
         concern_move=report["move"],
         concern_avoid=report["avoid"],
         seven_days=report["seven_days"],
+        hexagram=report["hexagram"],
     )
     return render_template(
         "result.html",

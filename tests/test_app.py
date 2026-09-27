@@ -191,6 +191,16 @@ def test_concern_reading_has_three_deterministic_variants():
     assert first["move"] in CONCERNS["work"]["moves"]
 
 
+def test_hexagram_layer_is_deterministic_and_has_sixty_four_signs():
+    from app import HEXAGRAM_NAMES, hexagram_reading
+    assert len(HEXAGRAM_NAMES) == 64
+    first = hexagram_reading("健太", "1990-01-01", "work", date(2026, 9, 6))
+    second = hexagram_reading("健太", "1990-01-01", "work", date(2026, 9, 6))
+    assert first == second
+    assert 1 <= first["index"] <= 64
+    assert "おい小便小僧" in first["voice"] or "べらんめえ" in first["voice"]
+
+
 def test_paid_reading_data_is_encrypted_and_recoverable(monkeypatch):
     monkeypatch.setenv("PAYMENT_DATA_KEY", "test-key-that-is-longer-than-thirty-two-characters")
     token = encrypt_reading_data("健太", "1990-01-01", "work")
