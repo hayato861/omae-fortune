@@ -271,7 +271,7 @@ def premium_report(name: str, birthday: str, concern: str, target_date: date | N
 
 @app.get("/")
 def index():
-    return render_template("index.html", today=date.today())
+    return render_template("index.html", today=date.today(), concerns=CONCERNS, concern="life")
 
 
 @app.get("/healthz")
@@ -298,6 +298,7 @@ def track_event():
 @app.post("/fortune")
 def fortune():
     name = request.form.get("name", "").strip()[:30]
+    concern = request.form.get("concern", "life")
     birthday_year = normalize_digits(request.form.get("birthday_year", "").strip())
     birthday_month = normalize_digits(request.form.get("birthday_month", "").strip())
     birthday_day = normalize_digits(request.form.get("birthday_day", "").strip())
@@ -308,7 +309,7 @@ def fortune():
         birthday_is_valid = date.fromisoformat(birthday) <= date.today()
     except ValueError:
         birthday_is_valid = False
-    if not name or not birthday_is_valid:
+    if not name or not birthday_is_valid or concern not in CONCERNS:
         return render_template(
             "index.html",
             today=date.today(),
@@ -318,14 +319,25 @@ def fortune():
             birthday_year=birthday_year,
             birthday_month=birthday_month,
             birthday_day=birthday_day,
+            concern=concern,
+            concerns=CONCERNS,
         ), 400
     analytics_logger.info(json.dumps({"event": "fortune_completed"}, ensure_ascii=False))
+    fortune_result = daily_fortune(name, birthday)
+    report = premium_report(name, birthday, concern)
+    fortune_result.update(
+        concern=report["concern"],
+        concern_key=concern,
+        concern_move=report["move"],
+        concern_avoid=report["avoid"],
+        seven_days=report["seven_days"],
+    )
     return render_template(
         "result.html",
         today=date.today(),
         name=name,
         birthday=birthday,
-        fortune=daily_fortune(name, birthday),
+        fortune=fortune_result,
     )
 
 

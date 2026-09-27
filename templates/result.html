@@ -46,6 +46,15 @@
       <p class="share-status" aria-live="polite"></p>
     </section>
     <div class="free-detail">
+      <section class="concern-reading">
+        <p class="section-number">選んだ悩み・{{ fortune.concern.label }}</p>
+        <h2>{{ fortune.concern_move }}</h2>
+        <p><b>今日の禁じ手：</b>{{ fortune.concern_avoid }}</p>
+      </section>
+      <section class="seven-days">
+        <p class="section-number">これから七日間の流れ</p>
+        <div class="seven-day-grid">{% for day in fortune.seven_days %}<article><span>{{ day.date.strftime('%m/%d') }}</span><b>{{ day.score }}点・{{ day.focus }}</b><p>{{ day.action }}</p></article>{% endfor %}</div>
+      </section>
       <p class="section-number">本日の一手</p>
       <h2>{{ fortune.action }}</h2>
       <div class="lucky-row"><span>勝負色 <b>{{ fortune.color }}</b></span><span>勝負数 <b>{{ fortune.lucky_number }}</b></span></div>

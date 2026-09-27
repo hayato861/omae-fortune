@@ -4,7 +4,7 @@ import json
 import shutil
 from pathlib import Path
 
-from app import DAY_DETAILS, FORTUNES, LIFE_PATHS, ONI_ASPECTS, app
+from app import CONCERNS, DAY_DETAILS, FORTUNES, LIFE_PATHS, ONI_ASPECTS, app
 
 
 BACKEND_ORIGIN = "https://omae-fortune.onrender.com"
@@ -45,7 +45,7 @@ def build() -> Path:
     result_html = result_html.replace('href="/premium"', f'href="{BACKEND_ORIGIN}/premium"')
     result_html = result_html.replace('href="/"', 'href="./"')
     result_html = result_html.replace('<body class="has-mobile-cta">', f'<body class="has-mobile-cta" data-backend-origin="{BACKEND_ORIGIN}" data-public-origin="{PAGES_ORIGIN}" data-static-result>')
-    data = json.dumps({"fortunes": FORTUNES, "days": DAY_DETAILS, "oni": LIFE_PATHS, "aspects": ONI_ASPECTS}, ensure_ascii=False, separators=(",", ":"))
+    data = json.dumps({"fortunes": FORTUNES, "days": DAY_DETAILS, "oni": LIFE_PATHS, "aspects": ONI_ASPECTS, "concerns": CONCERNS}, ensure_ascii=False, separators=(",", ":"))
     result_html = result_html.replace('</body>', f'<script>window.FORTUNE_DATA={data};</script><script src="static/static-fortune.js?v=20260925"></script></body>')
     (OUTPUT / "result.html").write_text(result_html, encoding="utf-8")
     (OUTPUT / ".nojekyll").touch()

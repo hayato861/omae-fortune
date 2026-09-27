@@ -12,7 +12,7 @@
       const valid = name && born.getFullYear() === Number(year) && born.getMonth() + 1 === Number(month) && born.getDate() === Number(day) && born <= new Date();
       if (!valid) return;
       event.preventDefault();
-      sessionStorage.setItem("oni-reading", JSON.stringify({ name, birthday }));
+      sessionStorage.setItem("oni-reading", JSON.stringify({ name, birthday, concern: form.elements.concern?.value || "life" }));
       window.location.href = "result.html";
     }, { capture: true });
   }
@@ -25,7 +25,7 @@
     return;
   }
 
-  const { name, birthday } = JSON.parse(saved);
+  const { name, birthday, concern: concernKey = "life" } = JSON.parse(saved);
   const data = window.FORTUNE_DATA;
   const reduce = (number) => {
     while (number > 9) number = [...String(number)].reduce((sum, digit) => sum + Number(digit), 0);
@@ -57,6 +57,12 @@
   const rank = score >= 88 ? "大吉" : score >= 76 ? "吉" : score >= 66 ? "中吉" : score >= 56 ? "小吉" : "末吉";
   const luckyNumber = ((seed >>> 8) % 99) + 1;
   const aspect = data.aspects[hash(`oni-aspect:${name}:${birthday}`) % data.aspects.length];
+  const personalDay = (target) => {
+    const bornDate = birthday.split("-").map(Number);
+    const year = reduce(bornDate[1] + bornDate[2] + [...String(target.getFullYear())].reduce((sum, digit) => sum + Number(digit), 0));
+    return reduce(reduce(year + target.getMonth() + 1) + target.getDate());
+  };
+  const concern = data.concerns[concernKey] || data.concerns.life;
 
   const set = (selector, value) => { const node = document.querySelector(selector); if (node) node.textContent = value; };
   document.title = `${name}の今日の運勢｜お前のためだけの占い`;
@@ -83,6 +89,20 @@
   const details = document.querySelectorAll(".daily-detail-grid p");
   [base.work, base.money, base.love, day.social, day.body, day.best_time, day.caution].forEach((value, index) => { if (details[index]) details[index].textContent = value; });
   set(".lock-overlay h2", `12守護鬼 × 5つの相 = 全60鬼\nてめえは「${oni.name}・${aspect.name}」`);
+  set(".concern-reading .section-number", `選んだ悩み・${concern.label}`);
+  set(".concern-reading h2", concern.move);
+  set(".concern-reading p:last-child", `今日の禁じ手：${concern.avoid}`);
+  document.querySelectorAll(".seven-day-grid article").forEach((card, index) => {
+    const target = new Date(`${todayIso}T00:00:00`);
+    target.setDate(target.getDate() + index);
+    const targetNumber = personalDay(target);
+    const targetFortune = data.fortunes[targetNumber - 1];
+    const targetDay = data.days[String(targetNumber)];
+    const values = card.querySelectorAll("span, b, p");
+    if (values[0]) values[0].textContent = `${String(target.getMonth() + 1).padStart(2, "0")}/${String(target.getDate()).padStart(2, "0")}`;
+    if (values[1]) values[1].textContent = `${targetFortune.score}点・${targetDay.focus}`;
+    if (values[2]) values[2].textContent = targetFortune.action;
+  });
   const profile = document.querySelector(".oni-profile");
   Object.assign(profile.dataset, { shareOni: oni.name, shareRole: oni.role, shareScore: score, shareWeapon: oni.weapon, shareWeakness: oni.weakness, shareHell: oni.hell });
   document.body.dataset.readingReady = "true";

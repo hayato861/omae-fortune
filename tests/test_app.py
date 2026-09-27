@@ -132,6 +132,17 @@ def test_segmented_birthday_fields_submit_and_survive_errors():
     assert 'value="13"' in invalid.text
 
 
+def test_free_reading_includes_selected_concern_and_seven_days():
+    response = app.test_client().post(
+        "/fortune",
+        data={"name": "健太", "birthday_year": "1990", "birthday_month": "1", "birthday_day": "1", "concern": "work"},
+    )
+    assert response.status_code == 200
+    assert "選んだ悩み・仕事" in response.text
+    assert "これから七日間の流れ" in response.text
+    assert response.text.count("点・") >= 7
+
+
 def test_life_path_number():
     assert life_path_number("1995-12-05") == 5
     assert life_path_number("1990-01-01") == 3
