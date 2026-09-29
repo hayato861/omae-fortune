@@ -68,7 +68,7 @@ test('server-rendered result does not send a second completion', () => {
 });
 
 test('image share keeps the prepared X text in one share field', () => {
-  assert.match(appCode, /const text = `俺の守護鬼は/);
+  assert.match(appCode, /const text = `今日の鬼くじ：/);
   assert.match(appCode, /await navigator\.share\(\{ title: "名もなき鬼の鬼印診断", text, files: \[file\] \}\)/);
   assert.doesNotMatch(appCode, /navigator\.share\(\{[^}]*url: shareUrl/);
 });

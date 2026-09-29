@@ -241,6 +241,7 @@ def test_share_message_includes_site_url():
     assert "url: shareUrl" not in script
     assert "易の卦は" in script
     assert "shareHexagram" in script
+    assert "今日の鬼くじ" in script
 
 
 def test_premium_page_promises_sixty_oni():

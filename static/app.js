@@ -176,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     context.fillStyle = "#d3a62c";
     context.font = '700 22px "Zen Kaku Gothic New", sans-serif';
-    context.fillText(`${profile.dataset.shareHexagram} / ${profile.dataset.shareLine}`, 70, 548);
+    context.fillText(`鬼くじ：${profile.dataset.shareHexagram} / ${profile.dataset.shareLine}`, 70, 548);
     context.fillStyle = "#d3a62c";
     context.font = '800 24px "Shippori Mincho", serif';
     context.fillText("お前は何鬼だ？", 70, 580);
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const profile = document.querySelector(".oni-profile");
     const status = document.querySelector(".share-status");
     const shareUrl = `${document.body.dataset.publicOrigin || window.location.origin}/`;
-    const text = `俺の守護鬼は「${profile.dataset.shareOni}」だった。易の卦は「${profile.dataset.shareHexagram}」の${profile.dataset.shareLine}。気をつけるべきは「${profile.dataset.shareHell}」だとよ。\nお前は何鬼だ？\n${shareUrl}\n#鬼印診断 #無料占い`;
+    const text = `今日の鬼くじ：${profile.dataset.shareLottery}\n俺の守護鬼は「${profile.dataset.shareOni}」だった。易の卦は「${profile.dataset.shareHexagram}」の${profile.dataset.shareLine}。気をつけるべきは「${profile.dataset.shareHell}」だとよ。\nお前は何鬼だ？\n${shareUrl}\n#鬼印診断 #無料占い`;
     track("share_started");
     button.disabled = true;
     status.textContent = "鬼印を焼きつけてる…";
