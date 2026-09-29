@@ -115,6 +115,6 @@
     if (values[2]) values[2].textContent = targetFortune.action;
   });
   const profile = document.querySelector(".oni-profile");
-  Object.assign(profile.dataset, { shareOni: oni.name, shareRole: oni.role, shareScore: score, shareWeapon: oni.weapon, shareWeakness: oni.weakness, shareHell: oni.hell });
+  Object.assign(profile.dataset, { shareOni: oni.name, shareRole: oni.role, shareScore: score, shareWeapon: oni.weapon, shareWeakness: oni.weakness, shareHell: oni.hell, shareHexagram: data.hexagrams[hexIndex], shareLine: hexStage[0] });
   document.body.dataset.readingReady = "true";
 })();
