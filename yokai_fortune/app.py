@@ -43,6 +43,10 @@ YOKAI_DETAILS = {
     "狐": ("変化と本音", "場に合わせる顔が増えすぎる夜", "本当の希望を一つ口にする", "好かれるために約束を増やす"),
     "目目連": ("観察と見落とし", "見えていない事実が答えを隠す夜", "事実と想像を別々に書く", "推測だけで誰かを裁く"),
 }
+YOKAI_SCENTS = (
+    "腐った豆腐", "濡れた畳", "焦げた線香", "川底の泥", "冷えた鉄",
+    "古い押し入れ", "消えかけた蝋燭", "雨に濡れた土", "甘すぎる花", "遠い海の藻",
+)
 
 
 def yokai_reading(name: str, birthday: str) -> dict[str, str]:
@@ -50,6 +54,7 @@ def yokai_reading(name: str, birthday: str) -> dict[str, str]:
     creature, title, advice = YOKAI[digest[0] % len(YOKAI)]
     omen = (digest[1] % 5) + 1
     nature, sign, move, avoid = YOKAI_DETAILS[creature]
+    scent = YOKAI_SCENTS[digest[2] % len(YOKAI_SCENTS)]
     seven_nights = []
     for offset in range(7):
         night = date.today() + timedelta(days=offset)
@@ -58,7 +63,8 @@ def yokai_reading(name: str, birthday: str) -> dict[str, str]:
         seven_nights.append({"date": night, "creature": night_creature, "title": night_title, "advice": night_advice})
     return {
         "creature": creature, "title": title, "advice": advice, "omen": str(omen), "image": YOKAI_IMAGES[creature],
-        "opening": f"人間の匂いがする……お前の匂いだ。今夜、背後に立つのは{creature}。",
+        "scent": scent,
+        "opening": f"{scent}の匂いがする……お前の匂いだ。今夜、背後に立つのは{creature}。",
         "nature": nature, "sign": sign, "move": move, "avoid": avoid,
         "nature_detail": f"{nature}の気配が強い夜だ。自分では見慣れた癖の中に、今夜だけ表へ出る力がある。{advice}",
         "sign_detail": f"{sign}。焦って答えを出すより、周囲の変化を一つ拾えば流れが読める。今夜の兆しは{omen}つだ。",
