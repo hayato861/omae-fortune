@@ -31,3 +31,16 @@ def test_yokai_state_changes_reading_deterministically():
     assert tired == tired_again
     assert tired["state_label"] == "疲れている"
     assert tired["state_message"] != clear["state_message"]
+
+
+def test_yokai_analytics_accepts_only_anonymous_known_events():
+    client = yokai_app.app.test_client()
+    assert client.post("/events", json={"event": "page_view", "name": "秘密"}).status_code == 204
+    assert client.post("/events", json={"event": "unknown"}).status_code == 400
+
+
+def test_yokai_premium_preparation_page_is_available():
+    response = yokai_app.app.test_client().get("/premium")
+    assert response.status_code == 200
+    assert "深層読み" in response.text
+    assert "一銭も取らねえ" in response.text

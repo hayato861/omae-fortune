@@ -1,4 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const sendEvent = (event) => {
+    const body = JSON.stringify({ event });
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon("/events", new Blob([body], { type: "text/plain;charset=UTF-8" }));
+    } else {
+      fetch("/events", { method: "POST", headers: { "Content-Type": "text/plain;charset=UTF-8" }, body, keepalive: true }).catch(() => {});
+    }
+  };
+  if (document.body.dataset.yokaiPage === "landing") {
+    sendEvent("page_view");
+    sendEvent("landing_view");
+  } else if (document.body.dataset.yokaiPage === "result") {
+    sendEvent("fortune_completed");
+  }
+  document.querySelectorAll("[data-track]").forEach((element) => {
+    element.addEventListener("click", () => sendEvent(element.dataset.track));
+  });
   const parts = [...document.querySelectorAll("[data-date-part]")];
   parts.forEach((input, index) => {
     input.addEventListener("input", () => {

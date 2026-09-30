@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import hashlib
+import json
+import logging
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -9,6 +11,14 @@ from flask import Flask, render_template, request
 
 ROOT = Path(__file__).resolve().parent
 app = Flask(__name__, template_folder=str(ROOT / "templates"), static_folder=str(ROOT / "static"))
+analytics_logger = logging.getLogger("yokai.analytics")
+analytics_logger.setLevel(logging.INFO)
+if not analytics_logger.handlers:
+    analytics_handler = logging.StreamHandler()
+    analytics_handler.setFormatter(logging.Formatter("%(message)s"))
+    analytics_logger.addHandler(analytics_handler)
+analytics_logger.propagate = False
+ALLOWED_EVENTS = {"page_view", "landing_view", "fortune_completed", "premium_clicked"}
 
 YOKAI = [
     ("河童", "流れを読むもの", "急がず、今日ひとつだけ水面を変えよ。"),
@@ -109,6 +119,23 @@ def index():
             return render_template("result.html", name=name, reading=reading)
     birthday_parts = birthday.split("-") if birthday.count("-") == 2 else ["", "", ""]
     return render_template("index.html", name=name, birthday=birthday, birthday_year=birthday_parts[0], birthday_month=birthday_parts[1], birthday_day=birthday_parts[2], reading=reading, error=error, current_states=CURRENT_STATES, state=state)
+
+
+@app.post("/events")
+def track_event():
+    try:
+        payload = json.loads(request.get_data())
+    except (ValueError, UnicodeDecodeError):
+        return {"error": "invalid event"}, 400
+    if not isinstance(payload, dict) or payload.get("event") not in ALLOWED_EVENTS:
+        return {"error": "invalid event"}, 400
+    analytics_logger.info(json.dumps({"event": payload["event"]}, ensure_ascii=False))
+    return "", 204
+
+
+@app.get("/premium")
+def premium():
+    return render_template("premium.html")
 
 
 if __name__ == "__main__":
