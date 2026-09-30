@@ -191,7 +191,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const profile = document.querySelector(".oni-profile");
     const status = document.querySelector(".share-status");
     const shareUrl = `${document.body.dataset.publicOrigin || window.location.origin}/`;
-    const text = `今日の鬼くじ：${profile.dataset.shareLottery}\n俺の守護鬼は「${profile.dataset.shareOni}」だった。易の卦は「${profile.dataset.shareHexagram}」の${profile.dataset.shareLine}。気をつけるべきは「${profile.dataset.shareHell}」だとよ。\nお前は何鬼だ？\n${shareUrl}\n#鬼印診断 #無料占い`;
+    const shorten = (value, limit) => String(value || "").replace(/\s+/g, " ").slice(0, limit);
+    const text = `今日の鬼くじ：「${shorten(profile.dataset.shareHexagram, 12)}」${shorten(profile.dataset.shareLine, 10)}\n守護鬼：「${shorten(profile.dataset.shareOni, 16)}」／地獄：「${shorten(profile.dataset.shareHell, 22)}」\nお前は何鬼だ？\n${shareUrl}\n#鬼印診断 #無料占い`;
     track("share_started");
     button.disabled = true;
     status.textContent = "鬼印を焼きつけてる…";

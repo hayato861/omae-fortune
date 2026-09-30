@@ -239,9 +239,9 @@ def test_share_message_includes_site_url():
     assert "${shareUrl}\\n#鬼印診断" in script
     assert 'navigator.share({ title: "名もなき鬼の鬼印診断", text, files: [file] })' in script
     assert "url: shareUrl" not in script
-    assert "易の卦は" in script
     assert "shareHexagram" in script
     assert "今日の鬼くじ" in script
+    assert "shorten(profile.dataset.shareHell, 22)" in script
 
 
 def test_premium_page_promises_sixty_oni():
