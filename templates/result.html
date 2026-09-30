@@ -49,6 +49,12 @@
       <p class="share-status" aria-live="polite"></p>
     </section>
     <div class="free-detail">
+      <section class="state-reading">
+        <p class="section-number">今の気配・{{ fortune.current_state.label }}</p>
+        <h2>{{ fortune.current_state.opening }}</h2>
+        <p><b>今の一手：</b>{{ fortune.current_state.move }}</p>
+        <p><b>避けること：</b>{{ fortune.current_state.avoid }}</p>
+      </section>
       <section class="concern-reading">
         <p class="section-number">選んだ悩み・{{ fortune.concern.label }}</p>
         <h2>{{ fortune.concern_move }}</h2>

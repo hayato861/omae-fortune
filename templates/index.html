@@ -46,6 +46,10 @@
       <select id="concern" name="concern" required>
         {% for key, item in concerns.items() %}<option value="{{ key }}"{% if concern == key %} selected{% endif %}>{{ item.label }}</option>{% endfor %}
       </select>
+      <label for="state">いまの状態</label>
+      <select id="state" name="state" required>
+        {% for key, item in current_states.items() %}<option value="{{ key }}"{% if state == key %} selected{% endif %}>{{ item.label }}</option>{% endfor %}
+      </select>
       <button type="submit"><span>無料で一喝される</span><b aria-hidden="true">→</b></button>
       <small>名と生まれ日はこの場の占いにしか使わぬ。あとに残して嗅ぎ回ったりもせぬ。</small>
     </form>

@@ -15,6 +15,7 @@
     </div>
     <blockquote>「{{ reading.advice }}」</blockquote>
     <p class="omen">今夜の兆し：{{ reading.omen }}つ。明日になれば、別のものが見える。</p>
+    <section class="state-reading"><p class="eyebrow">今の状態・{{ reading.state_label }}</p><p>{{ reading.state_message }}</p></section>
     <section class="reading-details">
       <details><summary><span>この妖怪の性質</span><strong>{{ reading.nature }}</strong><b>詳しく読む　＋</b></summary><p>{{ reading.nature_detail }}</p></details>
       <details><summary><span>今夜の気配</span><strong>{{ reading.sign }}</strong><b>詳しく読む　＋</b></summary><p>{{ reading.sign_detail }}</p></details>

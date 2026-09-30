@@ -35,6 +35,13 @@ CONCERNS = {
     "love": {"label": "恋", "opening": "惚れた相手の前じゃ、強みと弱みは同じ顔で現れやがる。", "move": "察してもらうのをやめ、望みを短い言葉で一つ伝えろ", "avoid": "返事を勝手に想像して先に傷つくこと", "moves": ["察してもらうのをやめ、望みを短い言葉で一つ伝えろ", "会いたいなら候補日を二つ出して、相手に選ばせろ", "相手の話を最後まで聞き、急いで結論を奪うな"], "avoids": ["返事を勝手に想像して先に傷つくこと", "昔の相手や誰かと比べて、今の縁を測ること", "試すような言い方で、本音を隠すこと"]},
     "life": {"label": "生き方", "opening": "道に迷うのは、道がねえからじゃない。捨てたくねえ道が多すぎるからだ。", "move": "今後三か月で守るものを一つだけ紙に書け", "avoid": "全部を同時に立て直そうとすること", "moves": ["今後三か月で守るものを一つだけ紙に書け", "明日の自分を楽にする小さな習慣を一つ始めろ", "役目を終えた予定か物を一つ手放し、余白を作れ"], "avoids": ["全部を同時に立て直そうとすること", "人の正解を借りて、自分の本音を後回しにすること", "疲れを無視して、根性だけで押し切ること"]},
 }
+CURRENT_STATES = {
+    "decide": {"label": "決めたいことがある", "opening": "腹の中では、もう答えの輪郭が見えてやがる。", "move": "候補を二つまで絞り、期限を決めろ", "avoid": "正解を探し続けて決断を先延ばしにすること"},
+    "tired": {"label": "疲れている", "opening": "運が悪いんじゃねえ。まず燃料が足りてねえ。", "move": "今日ひとつだけ予定を減らし、眠る準備をしろ", "avoid": "疲れたまま大事な結論を出すこと"},
+    "stuck": {"label": "人間関係で引っかかっている", "opening": "相手の言葉より、てめえが飲み込んだ一言が残ってやがる。", "move": "事実と想像を紙に分けて書け", "avoid": "返事のない理由を勝手に決めつけること"},
+    "hesitating": {"label": "動きたいけど迷っている", "opening": "止まっているようで、てめえはもう助走を始めてる。", "move": "十分で終わる小さな一手から始めろ", "avoid": "いきなり人生ごと変えようとすること"},
+    "clear": {"label": "特に悩みはない", "opening": "余白がある日は、思いがけねえ声を拾える。", "move": "普段なら選ばねえ小さな行動を一つ試せ", "avoid": "何もねえ日を無駄だと決めること"},
+}
 
 HEXAGRAM_NAMES = (
     "乾為天", "坤為地", "水雷屯", "山水蒙", "水天需", "天水訟", "地水師", "水地比",
@@ -254,9 +261,9 @@ def premium_oni_type(name: str, birthday: str) -> dict[str, str]:
     }
 
 
-def hexagram_reading(name: str, birthday: str, concern: str, target_date: date | None = None) -> dict[str, str | int]:
+def hexagram_reading(name: str, birthday: str, concern: str, target_date: date | None = None, state: str = "clear") -> dict[str, str | int]:
     target_date = target_date or date.today()
-    seed = hashlib.sha256(f"hex:{target_date.isoformat()}:{name.strip()}:{birthday}:{concern}".encode("utf-8")).digest()
+    seed = hashlib.sha256(f"hex:{target_date.isoformat()}:{name.strip()}:{birthday}:{concern}:{state}".encode("utf-8")).digest()
     index = int.from_bytes(seed[:4], "big") % len(HEXAGRAM_NAMES)
     line_index = seed[4] % len(HEXAGRAM_STAGES)
     voice, move, avoid = HEXAGRAM_GUIDANCE[index % len(HEXAGRAM_GUIDANCE)]
@@ -297,11 +304,11 @@ def daily_fortune(name: str, birthday: str, target_date: date | None = None) -> 
     return fortune
 
 
-def premium_report(name: str, birthday: str, concern: str, target_date: date | None = None) -> dict[str, object]:
+def premium_report(name: str, birthday: str, concern: str, target_date: date | None = None, state: str = "clear") -> dict[str, object]:
     target_date = target_date or date.today()
     concern_data = CONCERNS.get(concern, CONCERNS["life"])
     concern_variant = int(hashlib.sha256(f"concern:{target_date.isoformat()}:{name.strip()}:{birthday}:{concern}".encode("utf-8")).hexdigest()[:8], 16) % 3
-    hexagram = hexagram_reading(name, birthday, concern, target_date)
+    hexagram = hexagram_reading(name, birthday, concern, target_date, state)
     oni = LIFE_PATHS[life_path_number(birthday)]
     complete = premium_oni_type(name, birthday)
     seven_days = []
@@ -335,7 +342,7 @@ def premium_report(name: str, birthday: str, concern: str, target_date: date | N
 
 @app.get("/")
 def index():
-    return render_template("index.html", today=date.today(), concerns=CONCERNS, concern="life")
+    return render_template("index.html", today=date.today(), concerns=CONCERNS, concern="life", current_states=CURRENT_STATES, state="clear")
 
 
 @app.get("/healthz")
@@ -363,6 +370,7 @@ def track_event():
 def fortune():
     name = request.form.get("name", "").strip()[:30]
     concern = request.form.get("concern", "life")
+    state = request.form.get("state", "clear")
     birthday_year = normalize_digits(request.form.get("birthday_year", "").strip())
     birthday_month = normalize_digits(request.form.get("birthday_month", "").strip())
     birthday_day = normalize_digits(request.form.get("birthday_day", "").strip())
@@ -373,7 +381,7 @@ def fortune():
         birthday_is_valid = date.fromisoformat(birthday) <= date.today()
     except ValueError:
         birthday_is_valid = False
-    if not name or not birthday_is_valid or concern not in CONCERNS:
+    if not name or not birthday_is_valid or concern not in CONCERNS or state not in CURRENT_STATES:
         return render_template(
             "index.html",
             today=date.today(),
@@ -385,10 +393,12 @@ def fortune():
             birthday_day=birthday_day,
             concern=concern,
             concerns=CONCERNS,
+            current_states=CURRENT_STATES,
+            state=state,
         ), 400
     analytics_logger.info(json.dumps({"event": "fortune_completed"}, ensure_ascii=False))
     fortune_result = daily_fortune(name, birthday)
-    report = premium_report(name, birthday, concern)
+    report = premium_report(name, birthday, concern, state=state)
     fortune_result.update(
         concern=report["concern"],
         concern_key=concern,
@@ -396,6 +406,7 @@ def fortune():
         concern_avoid=report["avoid"],
         seven_days=report["seven_days"],
         hexagram=report["hexagram"],
+        current_state=CURRENT_STATES[state],
     )
     return render_template(
         "result.html",

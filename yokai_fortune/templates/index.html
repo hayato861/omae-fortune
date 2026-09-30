@@ -24,6 +24,7 @@
           <input name="birthday_day" inputmode="numeric" maxlength="2" pattern="[0-9]{1,2}" value="{{ birthday_day }}" placeholder="01" aria-label="生まれた日" data-date-part required><span>日</span>
         </div>
       </fieldset>
+      <label>いまの状態<select name="state" required>{% for key, item in current_states.items() %}<option value="{{ key }}"{% if state == key %} selected{% endif %}>{{ item[0] }}</option>{% endfor %}</select></label>
       <button>夜の帳をめくる　→</button>
     </form>
     {% if reading %}

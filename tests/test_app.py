@@ -149,6 +149,16 @@ def test_free_reading_includes_selected_concern_and_seven_days():
     assert response.text.count("点・") >= 7
 
 
+def test_free_reading_includes_selected_current_state():
+    response = app.test_client().post(
+        "/fortune",
+        data={"name": "健太", "birthday_year": "1990", "birthday_month": "1", "birthday_day": "1", "state": "tired"},
+    )
+    assert response.status_code == 200
+    assert "今の気配・疲れている" in response.text
+    assert "まず燃料が足りてねえ" in response.text
+
+
 def test_life_path_number():
     assert life_path_number("1995-12-05") == 5
     assert life_path_number("1990-01-01") == 3

@@ -47,10 +47,18 @@ YOKAI_SCENTS = (
     "腐った豆腐", "濡れた畳", "焦げた線香", "川底の泥", "冷えた鉄",
     "古い押し入れ", "消えかけた蝋燭", "雨に濡れた土", "甘すぎる花", "遠い海の藻",
 )
+CURRENT_STATES = {
+    "decide": ("決めたいことがある", "決める前の影が濃い夜だ。候補を二つまで絞れ。"),
+    "tired": ("疲れている", "運が悪いんじゃねえ。今夜はまず燃料を戻せ。"),
+    "stuck": ("人間関係で引っかかっている", "飲み込んだ一言が、背後の気配を重くしている。"),
+    "hesitating": ("動きたいけど迷っている", "止まっているようで、もう助走は始まっている。"),
+    "clear": ("特に悩みはない", "余白のある夜ほど、遠くの気配を拾える。"),
+}
 
 
-def yokai_reading(name: str, birthday: str) -> dict[str, str]:
-    digest = hashlib.sha256(f"yokai:{name.strip()}:{birthday}:{date.today().isoformat()}".encode()).digest()
+def yokai_reading(name: str, birthday: str, state: str = "clear") -> dict[str, str]:
+    state = state if state in CURRENT_STATES else "clear"
+    digest = hashlib.sha256(f"yokai:{name.strip()}:{birthday}:{date.today().isoformat()}:{state}".encode()).digest()
     creature, title, advice = YOKAI[digest[0] % len(YOKAI)]
     omen = (digest[1] % 5) + 1
     nature, sign, move, avoid = YOKAI_DETAILS[creature]
@@ -58,7 +66,7 @@ def yokai_reading(name: str, birthday: str) -> dict[str, str]:
     seven_nights = []
     for offset in range(7):
         night = date.today() + timedelta(days=offset)
-        night_digest = hashlib.sha256(f"yokai-night:{name.strip()}:{birthday}:{night.isoformat()}".encode()).digest()
+        night_digest = hashlib.sha256(f"yokai-night:{name.strip()}:{birthday}:{night.isoformat()}:{state}".encode()).digest()
         night_creature, night_title, night_advice = YOKAI[night_digest[0] % len(YOKAI)]
         seven_nights.append({"date": night, "creature": night_creature, "title": night_title, "advice": night_advice})
     return {
@@ -71,6 +79,8 @@ def yokai_reading(name: str, birthday: str) -> dict[str, str]:
         "move_detail": f"最初の一手は『{move}』。大きく変えようとせず、十分以内に始められる形まで小さくしろ。",
         "avoid_detail": f"『{avoid}』が今夜の落とし穴だ。やりたくなったら、ひと呼吸おいて明日の自分へ回せ。",
         "seven_nights": seven_nights,
+        "state_label": CURRENT_STATES[state][0],
+        "state_message": CURRENT_STATES[state][1],
     }
 
 
@@ -86,6 +96,7 @@ def index():
         ])
     reading = None
     error = None
+    state = request.form.get("state", "clear")
     if request.method == "POST":
         try:
             born = date.fromisoformat(birthday)
@@ -94,10 +105,10 @@ def index():
         except ValueError:
             error = "名前と生年月日を、静かに置いていけ。"
         else:
-            reading = yokai_reading(name, birthday)
+            reading = yokai_reading(name, birthday, state)
             return render_template("result.html", name=name, reading=reading)
     birthday_parts = birthday.split("-") if birthday.count("-") == 2 else ["", "", ""]
-    return render_template("index.html", name=name, birthday=birthday, birthday_year=birthday_parts[0], birthday_month=birthday_parts[1], birthday_day=birthday_parts[2], reading=reading, error=error)
+    return render_template("index.html", name=name, birthday=birthday, birthday_year=birthday_parts[0], birthday_month=birthday_parts[1], birthday_day=birthday_parts[2], reading=reading, error=error, current_states=CURRENT_STATES, state=state)
 
 
 if __name__ == "__main__":

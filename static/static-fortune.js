@@ -12,7 +12,7 @@
       const valid = name && born.getFullYear() === Number(year) && born.getMonth() + 1 === Number(month) && born.getDate() === Number(day) && born <= new Date();
       if (!valid) return;
       event.preventDefault();
-      sessionStorage.setItem("oni-reading", JSON.stringify({ name, birthday, concern: form.elements.concern?.value || "life" }));
+      sessionStorage.setItem("oni-reading", JSON.stringify({ name, birthday, concern: form.elements.concern?.value || "life", state: form.elements.state?.value || "clear" }));
       window.location.href = "result.html";
     }, { capture: true });
   }
@@ -25,7 +25,7 @@
     return;
   }
 
-  const { name, birthday, concern: concernKey = "life" } = JSON.parse(saved);
+  const { name, birthday, concern: concernKey = "life", state: stateKey = "clear" } = JSON.parse(saved);
   const data = window.FORTUNE_DATA;
   const reduce = (number) => {
     while (number > 9) number = [...String(number)].reduce((sum, digit) => sum + Number(digit), 0);
@@ -64,10 +64,11 @@
     return reduce(reduce(year + target.getMonth() + 1) + target.getDate());
   };
   const concern = data.concerns[concernKey] || data.concerns.life;
+  const currentState = data.current_states[stateKey] || data.current_states.clear;
   const concernVariant = hash(`${todayIso}:${name}:${birthday}:concern:${concernKey}`) % 3;
-  const hexIndex = hash(`${todayIso}:${name}:${birthday}:hex:${concernKey}`) % data.hexagrams.length;
+  const hexIndex = hash(`${todayIso}:${name}:${birthday}:hex:${concernKey}:${stateKey}`) % data.hexagrams.length;
   const hexGuidance = data.hexagram_guidance[hexIndex % data.hexagram_guidance.length];
-  const hexLine = hash(`${todayIso}:${name}:${birthday}:hex-line:${concernKey}`) % data.hexagram_stages.length;
+  const hexLine = hash(`${todayIso}:${name}:${birthday}:hex-line:${concernKey}:${stateKey}`) % data.hexagram_stages.length;
   const hexStage = data.hexagram_stages[hexLine];
 
   const set = (selector, value) => { const node = document.querySelector(selector); if (node) node.textContent = value; };
@@ -88,7 +89,7 @@
   [oni.weapon, oni.weakness, oni.person].forEach((value, index) => { if (traits[index]) traits[index].textContent = value; });
   set(".hell-card h3", oni.hell);
   set(".hell-escape p", oni.escape);
-  set(".free-detail h2", base.action);
+  set(".free-detail > h2", base.action);
   const lucky = document.querySelectorAll(".lucky-row b");
   if (lucky[0]) lucky[0].textContent = base.color;
   if (lucky[1]) lucky[1].textContent = luckyNumber;
@@ -102,6 +103,10 @@
   set(".hexagram-reading h2", `${hexGuidance[0]} ${hexStage[1]}`);
   set(".hexagram-reading p:nth-of-type(2)", `卦が授ける一手：${hexGuidance[1]}`);
   set(".hexagram-reading p:nth-of-type(3)", `卦が止めること：${hexGuidance[2]}`);
+  set(".state-reading .section-number", `今の気配・${currentState.label}`);
+  set(".state-reading h2", currentState.opening);
+  set(".state-reading p:nth-of-type(2)", `今の一手：${currentState.move}`);
+  set(".state-reading p:nth-of-type(3)", `避けること：${currentState.avoid}`);
   document.querySelectorAll(".seven-day-grid article").forEach((card, index) => {
     const target = new Date(`${todayIso}T00:00:00`);
     target.setDate(target.getDate() + index);
