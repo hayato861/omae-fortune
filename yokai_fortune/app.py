@@ -52,6 +52,7 @@ def yokai_reading(name: str, birthday: str) -> dict[str, str]:
     nature, sign, move, avoid = YOKAI_DETAILS[creature]
     return {
         "creature": creature, "title": title, "advice": advice, "omen": str(omen), "image": YOKAI_IMAGES[creature],
+        "opening": f"人間の匂いがする……お前の匂いだ。今夜、背後に立つのは{creature}。",
         "nature": nature, "sign": sign, "move": move, "avoid": avoid,
         "nature_detail": f"{nature}の気配が強い夜だ。自分では見慣れた癖の中に、今夜だけ表へ出る力がある。{advice}",
         "sign_detail": f"{sign}。焦って答えを出すより、周囲の変化を一つ拾えば流れが読める。今夜の兆しは{omen}つだ。",
