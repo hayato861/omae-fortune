@@ -21,6 +21,11 @@
       <details><summary><span>取るべき一手</span><strong>{{ reading.move }}</strong><b>詳しく読む　＋</b></summary><p>{{ reading.move_detail }}</p></details>
       <details><summary><span>避けるもの</span><strong>{{ reading.avoid }}</strong><b>詳しく読む　＋</b></summary><p>{{ reading.avoid_detail }}</p></details>
     </section>
+    <section class="seven-nights">
+      <p class="eyebrow">七夜の気配</p>
+      <h2>今夜から、七つの夜を覗く。</h2>
+      <div class="night-grid">{% for night in reading.seven_nights %}<article><span>{{ night.date.strftime('%m/%d') }}</span><strong>{{ night.creature }}</strong><small>{{ night.title }}</small><p>{{ night.advice }}</p></article>{% endfor %}</div>
+    </section>
     <section class="pro-cta">
       <p class="eyebrow">百鬼夜行・深層読み</p>
       <h2>まだ、表しか見ていない。</h2>
