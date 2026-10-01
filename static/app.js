@@ -1,4 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
+  const ownerParam = String(window.location.search || "").match(/[?&]owner=([01])(?:&|$)/)?.[1];
+  let isOwner = false;
+  try {
+    if (ownerParam === "1") localStorage.setItem("omae-owner", "1");
+    if (ownerParam === "0") localStorage.removeItem("omae-owner");
+    isOwner = localStorage.getItem("omae-owner") === "1";
+  } catch (_) {}
   const backendOrigin = document.body.dataset.backendOrigin || window.location.origin;
   const dailyHook = document.querySelector("[data-daily-hook]");
   if (dailyHook) {
@@ -35,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const track = (event) => {
+    if (isOwner) return;
     const body = JSON.stringify({ event });
     try {
       if (navigator.sendBeacon?.(`${backendOrigin}/events`, new Blob([body], { type: "text/plain" }))) return;

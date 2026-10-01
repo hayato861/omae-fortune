@@ -1,4 +1,11 @@
 (() => {
+  const ownerParam = String(window.location.search || "").match(/[?&]owner=([01])(?:&|$)/)?.[1];
+  let isOwner = false;
+  try {
+    if (ownerParam === "1") localStorage.setItem("omae-owner", "1");
+    if (ownerParam === "0") localStorage.removeItem("omae-owner");
+    isOwner = localStorage.getItem("omae-owner") === "1";
+  } catch (_) {}
   const form = document.querySelector("[data-static-fortune]");
   if (form) {
     form.addEventListener("submit", (event) => {
